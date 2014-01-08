@@ -34,6 +34,25 @@ $ = function(selector) {
   return document.querySelector(selector);
 };
 
+function Cache() {
+  var _cache = {};
+  function _key(value) {
+    return encodeURIComponent(value);
+  }
+  return {
+    get: function(key) {
+      return _cache[_key(key)];
+    },
+    exists: function(key) {
+      return _key(key) in _cache;
+    },
+    set: function(key, value) {
+      return _cache[_key(key)] = value;
+    }
+  };
+}
+var cache = new Cache();
+
 var form = $('form');
 var q = $('[name=q]');
 var results = $('.results');
@@ -53,21 +72,43 @@ function run() {
   search();
 }
 
+var previousQuery = null;
+
 function search(e, query) {
+  var timeStart = performance.now();
   query = query || q.value || '';
+  if (previousQuery === query) {
+    // Bail if the query hasn't changed.
+    return;
+  }
+  previousQuery = query;
   console.log('Queueing search for "' + query + '"');
-  worker.postMessage({
-    type: 'search',
-    data: {
-      query: query,
-      timeStart: performance.now()
-    }
-  });
+
+  if (cache.exists(query)) {
+    log('Searching cache for "' + query + '"');
+    var results = cache.get(query);
+    results.timeStart = timeStart;
+    methods.results(results);
+  } else {
+    worker.postMessage({
+      type: 'search',
+      data: {
+        query: query,
+        timeStart: timeStart
+      }
+    });
+  }
   // TODO: Use `replaceState` to update `q` querystring parameter.
 }
 
 function renderResults(data) {
   console.log('Rendering results');
+
+  if (!cache.exists(data.query)) {
+    console.log('Caching "' + data.query + '"');
+    cache.set(data.query, data);
+  }
+
   var html = '';
   data.results.forEach(function(result) {
     html += '<li><pre><code>' + JSON.stringify(result.doc, null, 2) +
