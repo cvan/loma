@@ -7,28 +7,25 @@ function log() {
 
 log('Loaded lunr v' + lunr.version);
 
-var index = lunr(function() {
-  this.field('app_url', {boost: 25});
-  this.field('slug', {boost: 20});
-  this.field('name', {boost: 20});
-  this.field('html_title', {boost: 17});
-  this.field('meta_keywords', {boost: 15});
-  this.field('keywords', {boost: 14});
-  this.field('category', {boost: 10});
-  this.field('meta_description', {boost: 10});
-
-  this.field('title', {boost: 20});
-  this.field('description', {boost: 5});
-
-  this.ref('_id');
-});
+var index;
 
 function run(data) {
   log('GET', data.url);
+
+  // Fetch JSON of all the documents.
   var xhr = new XMLHttpRequest();
   xhr.onload = loadDocs;
   xhr.open('get', data.url, true);
   xhr.send();
+
+  // Define fields to index in lunr.
+  index = lunr(function() {
+    var that = this;
+    Object.keys(data.fields).forEach(function(k) {
+      that.field(k, data.fields[k]);
+    });
+    that.ref(data.ref || '_id');
+  });
 }
 
 var docs = {};
