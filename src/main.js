@@ -6,8 +6,18 @@ if (qsDebug) {
   window.location.href = 'debug.html';
 }
 
-_.templateSettings.imports = {};
-_.templateSettings.variable = 'data';
+_.templateSettings = {
+  evaluate: /\{%([\s\S]+?)%\}/g,
+  interpolate: /\{\{([\s\S]+?)\}\}/g,
+  escape: /\{\{-([\s\S]+?)\}\}/g,
+  imports: {
+    pluralise: function(str, length, pluralStr) {
+      pluralStr = pluralStr || (str + 's');
+      return length === 1 ? str : pluralStr;
+    }
+  },
+  variable: 'data'
+};
 
 function log() {
   console.log(Array.prototype.slice.call(arguments, 0).join(' '));
@@ -55,9 +65,6 @@ var cache = new Cache();
 
 var form = $('form');
 var q = $('[name=q]');
-var results = $('.results');
-var resultsHeading = $('.results h1');
-var resultsList = $('.results ol');
 
 form.addEventListener('keyup', search, false);
 form.addEventListener('paste', search, false);
@@ -77,11 +84,13 @@ var previousQuery = null;
 function search(e, query) {
   var timeStart = performance.now();
   query = query || q.value || '';
+
   if (previousQuery === query) {
     // Bail if the query hasn't changed.
     return;
   }
   previousQuery = query;
+
   console.log('Queueing search for "' + query + '"');
 
   if (cache.exists(query)) {
@@ -98,37 +107,36 @@ function search(e, query) {
       }
     });
   }
-  // TODO: Use `replaceState` to update `q` querystring parameter.
+}
+
+var templatesCache = new Cache();
+
+function render(name, data) {
+  if (templatesCache.exists(name)) {
+    var html = templatesCache.get(name);
+  } else {
+    var html = $('#template-' + name).innerHTML;
+    templatesCache.set(name, html);
+  }
+  return _.template(html, data);
 }
 
 function renderResults(data) {
-  console.log('Rendering results');
-
   if (!cache.exists(data.query)) {
     console.log('Caching "' + data.query + '"');
     cache.set(data.query, data);
   }
 
-  var html = '';
-  data.results.forEach(function(result) {
-    html += '<li><pre><code>' + JSON.stringify(result.doc, null, 2) +
-            '</code></pre>';
-    if (result.score) {
-      html += '<div class="score">Score: ' + result.score.toFixed(8) +
-              '</div>';
-    }
-    html += '</li>';
+  console.log('Rendering results');
+
+  data.timing = performance.now() - data.timeStart;
+  $('.results h1').innerHTML = render('heading', data);
+
+  var resultsHTML = '';
+  data.results.forEach(function(item) {
+    resultsHTML += render('result', item);
   });
-  resultsHeading.innerHTML = data.results.length + ' result' +
-                             (data.results.length === 1 ? '' : 's');
-  if (data.query) {
-    resultsHeading.innerHTML += ' for &ldquo;' + data.query + '&rdquo;';
-  }
-  var time = (performance.now() - data.timeStart);
-  resultsHeading.innerHTML += ' <span class="speed">(took ' +
-                              (time / 1000).toFixed(8) +
-                              's)</span>';
-  resultsList.innerHTML = html;
+  $('.results ol').innerHTML = resultsHTML;
 }
 
 })();

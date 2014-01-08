@@ -8,12 +8,27 @@
   </head>
   <body>
     <form>
-      <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Search for a fruit" autofocus>
+      <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Search by keyword" autofocus>
     </form>
     <section class="results">
       <h1></h1>
       <ol></ol>
     </section>
+    <script type="text/template" id="template-heading">
+      {{ data.results.length }} {{ pluralise('result', data.results) }}
+      {% if (data.query) { %}
+        for &ldquo;{{ data.query }}&rdquo;
+      {% } %}
+      <span class="speed">(took {{ (data.timing / 1000).toFixed(8) }}s)</span>
+    </script>
+    <script type="text/template" id="template-result">
+      <li>
+        <pre><code>{{ JSON.stringify(data.doc, null, 2) }}</code></pre>
+        {% if (data.score) { %}
+          <div class="score">Score: {{ data.score.toFixed(8) }}</div>
+        {% } %}
+      </li>
+    </script>
     <script src="lib/lodash.js"></script>
     <script src="main.js"></script>
   </body>
