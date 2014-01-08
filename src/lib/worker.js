@@ -15,6 +15,7 @@ var index = lunr(function() {
   this.field('meta_keywords', {boost: 15});
   this.field('keywords', {boost: 14});
   this.field('category', {boost: 10});
+  this.field('meta_description', {boost: 10});
 
   this.field('title', {boost: 20});
   this.field('description', {boost: 5});
