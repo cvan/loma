@@ -74,19 +74,19 @@ function Cache() {
 }
 var cache = new Cache();
 
-var form = $('form');
 var q = $('[name=q]');
-
-form.addEventListener('keyup', search, false);
-form.addEventListener('paste', search, false);
-form.addEventListener('search', search, false);
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-}, false);
+var qsSearch = /[\?&]search=([\w\-]+)/i.exec(window.location.search);
+q.value = (qsSearch ? qsSearch[1] : '').toLowerCase();
 
 function run() {
-  var qsSearch = /[\?&]search=([\w\-]+)/i.exec(window.location.search);
-  q.value = (qsSearch ? qsSearch[1] : '').toLowerCase();
+  var form = $('form');
+  form.addEventListener('keyup', search, false);
+  form.addEventListener('paste', search, false);
+  form.addEventListener('search', search, false);
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+  }, false);
+
   search();
 }
 
