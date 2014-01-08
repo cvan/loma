@@ -36,7 +36,7 @@ worker.addEventListener('message', function(e) {
 worker.postMessage({
   type: 'run',
   data: {
-    url: '/src/data/app-processed-docs.json',
+    url: '../data/app-processed-docs.json',
     fields: {
       app_url: {boost: 25},
       slug: {boost: 20},
