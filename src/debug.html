@@ -49,7 +49,18 @@
       worker.postMessage({
         type: 'run',
         data: {
-          url: '/src/data/app-processed-docs.json'
+          url: '../data/app-processed-docs.json',
+          fields: {
+            app_url: {boost: 25},
+            slug: {boost: 20},
+            name: {boost: 20},
+            html_title: {boost: 17},
+            meta_keywords: {boost: 15},
+            keywords: {boost: 14},
+            category: {boost: 10},
+            meta_description: {boost: 10}
+          },
+          ref: '_id'
         }
       });
 
