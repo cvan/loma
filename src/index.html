@@ -22,11 +22,14 @@
       <span class="speed">(took {{ (data.timing / 1000).toFixed(8) }}s)</span>
     </script>
     <script type="text/template" id="template-result">
-      <li>
-        <pre><code>{{ JSON.stringify(data.doc, null, 2) }}</code></pre>
-        {% if (data.score) { %}
-          <div class="score">Score: {{ data.score.toFixed(8) }}</div>
-        {% } %}
+      <li{% if (data.score) { %} title="Score: {{ data.score.toFixed(8) }}"{% } %}>
+        {% var doc = data.doc %}
+        <a href="{{ doc.app_url }}" target="_blank">
+          {% if (doc.icon && doc.icon.url) { %}
+            <span class="icon" style="background-image: url({{ doc.icon.url }})"></span>
+          {% } %}
+          {{ doc.name }}
+        </a>
       </li>
     </script>
     <script src="lib/lodash.js"></script>
