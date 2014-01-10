@@ -1,4 +1,5 @@
 importScripts('lunr.js');
+importScripts('lunr.unicodeNormalizer.js');
 
 function log() {
   var msg = Array.prototype.slice.call(arguments, 0).join(' ');
@@ -12,12 +13,6 @@ var index;
 function run(data) {
   log('GET', data.url);
 
-  // Fetch JSON of all the documents.
-  var xhr = new XMLHttpRequest();
-  xhr.onload = loadDocs;
-  xhr.open('get', data.url, true);
-  xhr.send();
-
   // Define fields to index in lunr.
   index = lunr(function() {
     var that = this;
@@ -26,6 +21,12 @@ function run(data) {
     });
     that.ref(data.ref || '_id');
   });
+
+  // Fetch JSON of all the documents.
+  var xhr = new XMLHttpRequest();
+  xhr.onload = loadDocs;
+  xhr.open('get', data.url, true);
+  xhr.send();
 }
 
 var docs = {};
