@@ -15,6 +15,7 @@
     "grunt-contrib-watch": "~0.5.3",
     "nunjucks": "~1.0.1",
     "grunt-nunjucks": "~0.1.0",
-    "grunt-contrib-jshint": "~0.8.0"
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-connect": "~0.6.0"
   }
 }

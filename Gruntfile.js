@@ -1,6 +1,17 @@
 /*global module:false*/
 module.exports = function(grunt) {
   grunt.initConfig({
+    connect: {
+      server: {
+        options: {
+          base: 'src',
+          debug: !!(process.env.DEBUG || process.env.DEBUG),
+          keepalive: true,
+          open: !!(process.env.OPEN || process.env.open),
+          port: process.env.PORT || process.env.port || 9000
+        }
+      }
+    },
     jshint: {
       src: ['Gruntfile.js', 'src/**/*.js'],
       options: {
@@ -40,6 +51,7 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-nunjucks');
