@@ -6,19 +6,6 @@ if (qsDebug) {
   window.location.href = 'debug.html';
 }
 
-_.templateSettings = {
-  evaluate: /\{%([\s\S]+?)%\}/g,
-  interpolate: /\{\{([\s\S]+?)\}\}/g,
-  escape: /\{\{-([\s\S]+?)\}\}/g,
-  imports: {
-    pluralise: function(str, length, pluralStr) {
-      pluralStr = pluralStr || (str + 's');
-      return length === 1 ? str : pluralStr;
-    }
-  },
-  variable: 'data'
-};
-
 function log() {
   console.log(Array.prototype.slice.call(arguments, 0).join(' '));
 }
@@ -51,9 +38,9 @@ worker.postMessage({
   }
 });
 
-$ = function(selector) {
+function $(selector) {
   return document.querySelector(selector);
-};
+}
 
 function Cache() {
   var _cache = {};
@@ -120,16 +107,25 @@ function search(e, query) {
   }
 }
 
-var templatesCache = new Cache();
+var env = nunjucks.configure('src/templates', {autoescape: true});
+var envGlobals = nunjucks.require('globals');
+env.addFunction = function(name, func) {
+  envGlobals[name] = func;
+};
 
-function render(name, data) {
-  if (templatesCache.exists(name)) {
-    var html = templatesCache.get(name);
-  } else {
-    var html = $('#template-' + name).innerHTML;
-    templatesCache.set(name, html);
-  }
-  return _.template(html, data);
+env.addFunction('pluralise', function(str, length, pluralStr) {
+  // TODO: Add real ngettext (issue #2).
+  pluralStr = pluralStr || (str + 's');
+  return length === 1 ? str : pluralStr;
+});
+
+function render(name, ctx, cb) {
+  return env.render(name + '.html', ctx, function(err, res) {
+    if (err) {
+      return console.error(err);
+    }
+    cb(res);
+  });
 }
 
 function renderResults(data) {
@@ -141,13 +137,14 @@ function renderResults(data) {
   console.log('Rendering results');
 
   data.timing = performance.now() - data.timeStart;
-  $('.results h1').innerHTML = render('heading', data);
 
-  var resultsHTML = '';
-  data.results.forEach(function(item) {
-    resultsHTML += render('result', item);
+  render('heading', {data: data}, function(res) {
+    $('.results h1').innerHTML = res;
   });
-  $('.results ol').innerHTML = resultsHTML;
+
+  render('results', {results: data.results}, function(res) {
+    $('.results ol').innerHTML = res;
+  });
 }
 
 })();

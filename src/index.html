@@ -14,25 +14,8 @@
       <h1></h1>
       <ol></ol>
     </section>
-    <script type="text/template" id="template-heading">
-      {{ data.results.length }} {{ pluralise('result', data.results) }}
-      {% if (data.query) { %}
-        for &ldquo;{{ data.query }}&rdquo;
-      {% } %}
-      <span class="speed">(took {{ (data.timing / 1000).toFixed(8) }}s)</span>
-    </script>
-    <script type="text/template" id="template-result">
-      <li{% if (data.score) { %} title="Score: {{ data.score.toFixed(8) }}"{% } %}>
-        {% var doc = data.doc %}
-        <a href="{{ doc.app_url }}" target="_blank">
-          {% if (doc.icon && doc.icon.url) { %}
-            <span class="icon" style="background-image: url({{ doc.icon.url }})"></span>
-          {% } %}
-          {{ doc.name }}
-        </a>
-      </li>
-    </script>
-    <script src="lib/lodash.js"></script>
+    <script src="templates.js"></script>
+    <script src="lib/nunjucks-slim.js"></script>
     <script src="main.js"></script>
   </body>
 </html>

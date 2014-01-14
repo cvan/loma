@@ -1,0 +1,20 @@
+{
+  "name": "loma",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=0.10.x",
+    "npm": ">=1.1.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cvan/loma.git"
+  },
+  "devDependencies": {
+    "grunt-cli": "latest",
+    "grunt": "~0.4.1",
+    "grunt-contrib-watch": "~0.5.3",
+    "nunjucks": "~1.0.1",
+    "grunt-nunjucks": "~0.1.0",
+    "grunt-contrib-jshint": "~0.8.0"
+  }
+}
