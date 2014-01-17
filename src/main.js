@@ -1,7 +1,20 @@
 (function() {
 
+var views = {};
+
+var app = new routes();
+
+app.get('/', function(req) {
+  views.search();
+});
+
+app.get('/search', function(req) {
+  views.search();
+});
+
+
 var qsDebug = /[\?&]debug=([\w\-]+)/i.exec(window.location.search);
-qsDebug = (qsDebug ? qsDebug[1] : '').toLowerCase();
+qsDebug = qsDebug && qsDebug[1];
 if (qsDebug) {
   window.location.href = 'debug.html';
 }
@@ -16,27 +29,32 @@ var methods = {
   'results': renderResults
 };
 
-var worker = new Worker('lib/worker.js');
-worker.addEventListener('message', function(e) {
-  methods[e.data.type](e.data.data);
-});
-worker.postMessage({
-  type: 'run',
-  data: {
-    url: '../data/app-processed-docs.json',
-    fields: {
-      app_url: {boost: 25},
-      slug: {boost: 20},
-      name: {boost: 20},
-      html_title: {boost: 17},
-      meta_keywords: {boost: 15},
-      keywords: {boost: 14},
-      category: {boost: 10},
-      meta_description: {boost: 10}
-    },
-    ref: '_id'
-  }
-});
+var worker;
+
+views.search = function searchView() {
+  document.body.setAttribute('class', 'results');
+  worker = new Worker('lib/worker.js');
+  worker.addEventListener('message', function(e) {
+    methods[e.data.type](e.data.data);
+  });
+  worker.postMessage({
+    type: 'run',
+    data: {
+      url: '../data/app-processed-docs.json',
+      fields: {
+        app_url: {boost: 25},
+        slug: {boost: 20},
+        name: {boost: 20},
+        html_title: {boost: 17},
+        meta_keywords: {boost: 15},
+        keywords: {boost: 14},
+        category: {boost: 10},
+        meta_description: {boost: 10}
+      },
+      ref: '_id'
+    }
+  });
+}
 
 function $(selector) {
   return document.querySelector(selector);
@@ -62,8 +80,8 @@ function Cache() {
 var cache = new Cache();
 
 var q = $('[name=q]');
-var qsSearch = /[\?&]search=([\w\-]+)/i.exec(window.location.search);
-q.value = (qsSearch ? qsSearch[1] : '').toLowerCase();
+var qsSearch = /[\?&]q=([\w\-]+)/i.exec(window.location.search);
+q.value = qsSearch ? qsSearch[1] : '';
 
 function run() {
   var form = $('form');
@@ -78,6 +96,7 @@ function run() {
 }
 
 var previousQuery = null;
+var previousResults = null;
 
 function search(e, query) {
   var timeStart = performance.now();
@@ -128,23 +147,41 @@ function render(name, ctx, cb) {
   });
 }
 
+function eq(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
 function renderResults(data) {
+  console.log('Rendering results');
+
+  data.timing = performance.now() - data.timeStart;
+
+  render('header', {data: data}, function(res) {
+    $('main header').innerHTML = res;
+  });
+
+  var current = data.results.map(function(x) {
+    return x.doc._id;
+  });
+
+  var previous = previousResults ? previousResults.results.map(function(x) {
+    return x.doc._id;
+  }) : [];
+
+  if (!eq(current, previous)) {
+    // Only re-render results if results have changed.
+    render('results', {data: data}, function(res) {
+      $('main ol').innerHTML = res;
+    });
+  } else {
+  }
+
   if (!cache.exists(data.query)) {
     console.log('Caching "' + data.query + '"');
     cache.set(data.query, data);
   }
 
-  console.log('Rendering results');
-
-  data.timing = performance.now() - data.timeStart;
-
-  render('heading', {data: data}, function(res) {
-    $('.results h1').innerHTML = res;
-  });
-
-  render('results', {results: data.results}, function(res) {
-    $('.results ol').innerHTML = res;
-  });
+  previousResults = data;
 }
 
 })();

@@ -2,20 +2,23 @@
 <html>
   <head>
     <title>loma</title>
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet" type="text/css">
     <link href="style.css" media="all" rel="stylesheet" type="text/css">
     <meta charset="utf-8">
     <meta name="robots" content="none">
   </head>
   <body>
-    <form>
-      <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Search by keyword" autofocus>
+    <header class="header">
+      <a href="/submit" class="submit">Submit a site</a>
+      <a href="/" class="browse">Browse sites</a>
+    </header>
+    <form class="form-search" action="/search">
+      <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Search by keyword">
     </form>
-    <section class="results">
-      <h1></h1>
-      <ol></ol>
-    </section>
+    <main><header></header><ol></ol></main>
     <script src="templates.js"></script>
     <script src="lib/nunjucks-slim.js"></script>
+    <script src="lib/routes.js"></script>
     <script src="main.js"></script>
   </body>
 </html>

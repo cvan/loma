@@ -26,13 +26,16 @@ module.exports = function(grunt) {
   grunt.initConfig({
     connect: {
       server: {
-        options: {
-          base: 'src',
-          debug: !!(process.env.DEBUG || process.env.DEBUG),
-          keepalive: true,
-          open: !!(process.env.OPEN || process.env.open),
-          port: process.env.PORT || process.env.port || 9000
-        }
+        options: serverOptions,
+      },
+      rules: [
+        // TODO: If a URI contains a trailing slash, strip and redirect.
+        {from: '^/search$', to: '/index.html'},
+        {from: '^/search[\?].*$', to: '/index.html'},
+        {from: '^/submit$', to: '/index.html'}
+      ],
+      development: {
+        options: developmentOptions
       }
     },
     jshint: {
@@ -68,13 +71,14 @@ module.exports = function(grunt) {
     },
     watch: {
       nunjucks: {
-        files: '*',
+        files: 'src/templates/*',
         tasks: ['nunjucks']
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-connect-rewrite');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadTasks('./node_modules/grunt-nunjucks/tasks');

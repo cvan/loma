@@ -1,11 +1,9 @@
-{% for data in results %}
+{% for data in data.results %}
   <li{% if data.score %} title="Score: {{ data.score.toFixed(8) }}"{% endif %}>
     {% set doc = data.doc %}
     <a href="{{ doc.app_url }}" target="_blank">
-      {% if doc.icon and doc.icon.url %}
-        <!--<span class="icon" style="background-image: url({{ doc.icon.url }})"></span>-->
-      {% endif %}
-      {{ doc.name }}
+      <div class="screenshot" style="background-image: url(http://localhost:7000/screenshot?url={{ doc.app_url }})"></div>
+      <span class="name">{{ doc.name }}</span>
     </a>
   </li>
 {% endfor %}
