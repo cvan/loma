@@ -1,17 +1,67 @@
 (function() {
 
+function $(s) {
+  var r = document.querySelectorAll(s || 'body');
+  return r.length == 1 ? r[0] : Array.prototype.slice.call(r);
+}
+
+var titles = {
+  '/': 'Mobile sites',
+  '/search': 'Search',
+  '/submit': 'Submit'
+};
+
 var views = {};
 
 var app = new routes();
 
+app.load = function(url) {
+  window.history.pushState(undefined, getTitle(url), url);
+
+  // We must have the exact pathname (no querystring parameters, etc.).
+  var path = getPath(url);
+  if (url !== path) {
+    url = path;
+  }
+
+  app.test(url);
+};
+
 app.get('/', function(req) {
+  var qsSearch = /[\?&]q=([\w\-]+)/i.exec(window.location.search);
+  q.value = qsSearch && qsSearch[1];
+  document.title = getTitle(req.url);
   views.search();
 });
 
-app.get('/search', function(req) {
-  views.search();
+app.get('/submit', function(req) {
+  document.title = getTitle(req.url);
+  views.submit();
 });
 
+function parseLink(url) {
+  var a = document.createElement('a');
+  a.href = url;
+  return a;
+}
+
+function getPath(url) {
+  return parseLink(url).pathname;
+}
+
+function getTitle(pathname) {
+  return (titles[pathname] || titles['/']) + ' | loma';
+}
+
+$('a[href^="/"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    app.load(this.getAttribute('href'));
+
+    return false;
+  });
+});
 
 var qsDebug = /[\?&]debug=([\w\-]+)/i.exec(window.location.search);
 qsDebug = qsDebug && qsDebug[1];
@@ -23,42 +73,27 @@ function log() {
   console.log(Array.prototype.slice.call(arguments, 0).join(' '));
 }
 
-var methods = {
-  'log': log,
-  'loaded': run,
-  'results': renderResults
+views.search = function searchView() {
+  if (document.body.classList.contains('results')) {
+    search();
+  }
+
+  render('browse', function(res) {
+    $('main').innerHTML = res;
+    indexed.then(function() {
+      document.body.setAttribute('class', 'results');
+      search();
+    });
+  });
 };
 
-var worker;
-
-views.search = function searchView() {
-  document.body.setAttribute('class', 'results');
-  worker = new Worker('lib/worker.js');
-  worker.addEventListener('message', function(e) {
-    methods[e.data.type](e.data.data);
+views.submit = function submitView() {
+  resetSearch();
+  document.body.setAttribute('class', 'submit');
+  render('submit', function(res) {
+    $('main').innerHTML = res;
   });
-  worker.postMessage({
-    type: 'run',
-    data: {
-      url: '../data/app-processed-docs.json',
-      fields: {
-        app_url: {boost: 25},
-        slug: {boost: 20},
-        name: {boost: 20},
-        html_title: {boost: 17},
-        meta_keywords: {boost: 15},
-        keywords: {boost: 14},
-        category: {boost: 10},
-        meta_description: {boost: 10}
-      },
-      ref: '_id'
-    }
-  });
-}
-
-function $(selector) {
-  return document.querySelector(selector);
-}
+};
 
 function Cache() {
   var _cache = {};
@@ -80,26 +115,13 @@ function Cache() {
 var cache = new Cache();
 
 var q = $('[name=q]');
-var qsSearch = /[\?&]q=([\w\-]+)/i.exec(window.location.search);
-q.value = qsSearch ? qsSearch[1] : '';
-
-function run() {
-  var form = $('form');
-  form.addEventListener('keyup', search, false);
-  form.addEventListener('paste', search, false);
-  form.addEventListener('search', search, false);
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-  }, false);
-
-  search();
-}
 
 var previousQuery = null;
 var previousResults = null;
 
 function search(e, query) {
   var timeStart = performance.now();
+
   query = query || q.value || '';
 
   if (previousQuery === query) {
@@ -139,6 +161,10 @@ env.addFunction('pluralise', function(str, length, pluralStr) {
 });
 
 function render(name, ctx, cb) {
+  if (typeof ctx === 'function') {
+    cb = ctx;
+    ctx = {};
+  }
   return env.render(name + '.html', ctx, function(err, res) {
     if (err) {
       return console.error(err);
@@ -155,6 +181,13 @@ function renderResults(data) {
   console.log('Rendering results');
 
   data.timing = performance.now() - data.timeStart;
+
+  // Update location bar based on search term.
+  if (q.value) {
+    window.history.replaceState({}, getTitle('/'), '/?q=' + q.value);
+  } else if (document.location.search) {
+    window.history.replaceState({}, getTitle('/'), '/');
+  }
 
   render('header', {data: data}, function(res) {
     $('main header').innerHTML = res;
@@ -173,7 +206,6 @@ function renderResults(data) {
     render('results', {data: data}, function(res) {
       $('main ol').innerHTML = res;
     });
-  } else {
   }
 
   if (!cache.exists(data.query)) {
@@ -183,5 +215,61 @@ function renderResults(data) {
 
   previousResults = data;
 }
+
+function resetSearch() {
+  q.value = previousQuery = previousResults = null;
+}
+
+var form = $('form');
+form.addEventListener('input', search, false);
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  search();
+}, false);
+$('input[name=q]').addEventListener('keypress', function() {
+  if (!document.body.classList.contains('results')) {
+    app.load('/');
+  }
+}, false);
+
+var methods = {
+  'log': log,
+  'results': renderResults
+};
+
+var worker;
+
+function index() {
+  var promise = new Promise(function(resolve, reject) {
+    worker = new Worker('lib/worker.js');
+    worker.addEventListener('message', function(e) {
+      if (e.data.type === 'indexed') {
+        resolve();
+      } else {
+        methods[e.data.type](e.data.data);
+      }
+    });
+    worker.postMessage({
+      type: 'index',
+      data: {
+        url: '../data/app-processed-docs.json',
+        fields: {
+          app_url: {boost: 25},
+          slug: {boost: 20},
+          name: {boost: 20},
+          html_title: {boost: 17},
+          meta_keywords: {boost: 15},
+          keywords: {boost: 14},
+          category: {boost: 10},
+          meta_description: {boost: 10}
+        },
+        ref: '_id'
+      }
+    });
+  });
+  return promise;
+}
+
+var indexed = index();
 
 })();

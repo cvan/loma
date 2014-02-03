@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>loma</title>
+    <title>Mobile sites | loma</title>
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet" type="text/css">
     <link href="style.css" media="all" rel="stylesheet" type="text/css">
     <meta charset="utf-8">
@@ -12,13 +12,14 @@
       <a href="/submit" class="submit">Submit a site</a>
       <a href="/" class="browse">Browse sites</a>
     </header>
-    <form class="form-search" action="/search">
+    <form class="form-search" action="/">
       <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Search by keyword">
     </form>
-    <main><header></header><ol></ol></main>
+    <main></main>
     <script src="templates.js"></script>
     <script src="lib/nunjucks-slim.js"></script>
     <script src="lib/routes.js"></script>
+    <script src="lib/promise-0.1.1.min.js"></script>
     <script src="main.js"></script>
   </body>
 </html>

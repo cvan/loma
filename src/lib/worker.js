@@ -10,7 +10,7 @@ log('Loaded lunr v' + lunr.version);
 
 var index;
 
-function run(data) {
+function index(data) {
   log('GET', data.url);
 
   // Define fields to index in lunr.
@@ -44,7 +44,7 @@ function loadDocs() {
   log('Indexed ' + list.length +
       ' doc' + (list.length === 1 ? '' : 's'));
 
-  postMessage({type: 'loaded'});
+  postMessage({type: 'indexed'});
 }
 
 function searchDocs(data) {
@@ -81,7 +81,7 @@ function searchDocs(data) {
 }
 
 var methods = {
-  run: run,
+  index: index,
   search: searchDocs
 };
 
