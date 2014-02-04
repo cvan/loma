@@ -1,7 +1,7 @@
 <nav>
-  <a href="/submit" class="submit">Submit a site</a>
-  <a href="/" class="browse">Browse sites</a>
+  <a href="/submit" class="submit">{{ _('Submit a site', 'navSubmit') }}</a>
+  <a href="/" class="browse">{{ _('Browse sites', 'navBrowse') }}</a>
 </nav>
 <form class="form-search" action="/">
-  <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Search by keyword">
+  <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="{{ _('Search by keyword', 'searchPlaceholder') }}">
 </form>

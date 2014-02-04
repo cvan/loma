@@ -158,6 +158,5 @@ var routes = function() {
       matchRoute(document.location.pathname);
     }, false);
   };
-
   attach();
 };

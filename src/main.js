@@ -1,31 +1,5 @@
 (function() {
 
-function $(sel) {
-  if (!sel) {
-    return document.body;
-  }
-  var r = document.querySelectorAll(sel);
-  return r.length == 1 ? r[0] : Array.prototype.slice.call(r);
-}
-
-$.matches = function(el, sel) {
-  var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
-                        el.oMatchesSelector || el.matchesSelector;
-  return matchesSelector.call(el, sel);
-};
-
-$.delegate = function(type, sel, handler) {
-  document.addEventListener(type, function(e) {
-    var parent = e.target;
-    while (parent && parent !== document) {
-      if ($.matches(parent, sel)) {
-        handler(e);
-      }
-      parent = parent.parentNode;
-    }
-  }, false);
-};
-
 function parseQueryString(qs) {
   if (!qs) {
     qs = window.location.search.substr(1);
@@ -53,10 +27,45 @@ function serialize(obj) {
 
 var GET = parseQueryString();
 
+if (GET.lang) {
+  document.webL10n.setLanguage(GET.lang);
+}
+
+function $(sel) {
+  if (!sel) {
+    return document.body;
+  }
+  var r = document.querySelectorAll(sel);
+  return r.length == 1 ? r[0] : Array.prototype.slice.call(r);
+}
+
+$.matches = function(el, sel) {
+  var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
+                        el.oMatchesSelector || el.matchesSelector;
+  return matchesSelector.call(el, sel);
+};
+
+$.delegate = function(type, sel, handler) {
+  document.addEventListener(type, function(e) {
+    var parent = e.target;
+    while (parent && parent !== document) {
+      if ($.matches(parent, sel)) {
+        handler(e);
+      }
+      parent = parent.parentNode;
+    }
+  }, false);
+};
+
+
+document.webL10n.ready(function() {
+  document.documentElement.lang = document.webL10n.getLanguage();
+  document.documentElement.dir = document.webL10n.getDirection();
+
 var titles = {
-  '/': 'Mobile sites',
-  '/search': 'Search',
-  '/submit': 'Submit'
+  '/': _l('Mobile sites', 'titleDefault'),
+  '/search': _l('Search', 'titleSearch'),
+  '/submit': _l('Submit', 'titleSubmit')
 };
 
 var views = {};
@@ -194,11 +203,44 @@ env.addFunction = function(name, func) {
   envGlobals[name] = func;
 };
 
-env.addFunction('pluralise', function(str, length, pluralStr) {
-  // TODO: Add real ngettext (issue #2).
-  pluralStr = pluralStr || (str + 's');
-  return length === 1 ? str : pluralStr;
-});
+var SafeString = nunjucks.require('runtime').SafeString;
+var filters = nunjucks.require('filters');
+
+env.makeSafe = function(func) {
+  return function() {
+    return new SafeString(func.apply(this, arguments));
+  };
+};
+
+var formatRe = /\{([^}]+)\}/g;
+filters.format = function(s, args) {
+  if (!s) {
+    throw new Error('Format string is empty');
+  }
+  if (!args) {
+    return;
+  }
+  if (!(args instanceof Array || args instanceof Object)) {
+    args = Array.prototype.slice.call(arguments, 1);
+  }
+  return s.replace(formatRe, function(_, match) {
+    return args[match];
+  });
+};
+
+
+function _l(str, id, opts) {
+  // For pluralisation.
+  var pluralOpts = {};
+  if (opts && 'n' in opts) {
+    pluralOpts = {n: opts.n};
+  }
+  // Use webL10n to localise.
+  str = _(id, pluralOpts) || str;
+  return opts ? filters.format(str, opts) : str;
+}
+
+env.addFunction('_', env.makeSafe(_l));
 
 function render(name, ctx, cb) {
   if (typeof ctx === 'function') {
@@ -316,6 +358,11 @@ render('header', function(res) {
   $('.header').innerHTML = res;
   q = $('input[name=q]');
   q.value = GET.q || '';
+
+  // Because `routes.js` listens for `window.load` event, explicitly load view.
+  app.load(document.location.pathname);
+});
+
 });
 
 })();

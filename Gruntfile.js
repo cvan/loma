@@ -30,9 +30,8 @@ module.exports = function(grunt) {
       },
       rules: [
         // TODO: If a URI contains a trailing slash, strip and redirect.
-        {from: '^/search$', to: '/index.html'},
-        {from: '^/search[\?].*$', to: '/index.html'},
-        {from: '^/submit$', to: '/index.html'}
+        {from: '^/search([\?].*)?$', to: '/index.html'},
+        {from: '^/submit([\?].*)?$', to: '/index.html'},
       ],
       development: {
         options: developmentOptions
