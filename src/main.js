@@ -1,9 +1,30 @@
 (function() {
 
-function $(s) {
-  var r = document.querySelectorAll(s || 'body');
+function $(sel) {
+  if (!sel) {
+    return document.body;
+  }
+  var r = document.querySelectorAll(sel);
   return r.length == 1 ? r[0] : Array.prototype.slice.call(r);
 }
+
+$.matches = function(el, sel) {
+  var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
+                        el.oMatchesSelector || el.matchesSelector;
+  return matchesSelector.call(el, sel);
+};
+
+$.delegate = function(type, sel, handler) {
+  document.addEventListener(type, function(e) {
+    var parent = e.target;
+    while (parent && parent !== document) {
+      if ($.matches(parent, sel)) {
+        handler(e);
+      }
+      parent = parent.parentNode;
+    }
+  }, false);
+};
 
 var titles = {
   '/': 'Mobile sites',
@@ -53,14 +74,9 @@ function getTitle(pathname) {
   return (titles[pathname] || titles['/']) + ' | loma';
 }
 
-$('a[href^="/"]').forEach(function(a) {
-  a.addEventListener('click', function(e) {
-    e.preventDefault();
-
-    app.load(this.getAttribute('href'));
-
-    return false;
-  });
+$.delegate('click', 'a[href^="/"]', function(e) {
+  e.preventDefault();
+  app.load(e.target.getAttribute('href'));
 });
 
 var qsDebug = /[\?&]debug=([\w\-]+)/i.exec(window.location.search);
@@ -220,17 +236,16 @@ function resetSearch() {
   q.value = previousQuery = previousResults = null;
 }
 
-var form = $('form');
-form.addEventListener('input', search, false);
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
+$.delegate('input', 'input[name=q]', function() {
   search();
 }, false);
-$('input[name=q]').addEventListener('keypress', function() {
-  if (!document.body.classList.contains('results')) {
-    app.load('/');
-  }
-}, false);
+$.delegate('submit', '.form-search', function(e) {
+  e.preventDefault();
+  search();
+});
+$.delegate('keypress', 'body:not(.results) input[name=q]', function(e) {
+  app.load('/');
+});
 
 var methods = {
   'log': log,
