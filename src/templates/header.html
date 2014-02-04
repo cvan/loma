@@ -1,8 +1,7 @@
-{% if data.query %}
-<h1>
-  {{ data.results.length }} {{ pluralise('result', data.results.length) }}
-    for <b>{{ data.query }}</b>
-  {% set timing = data.timing / 1000 %}
-  <span class="speed">(took {{ timing|round(6, 'floor') }}s)</span>
-</h1>
-{% endif %}
+<nav>
+  <a href="/submit" class="submit">Submit a site</a>
+  <a href="/" class="browse">Browse sites</a>
+</nav>
+<form class="form-search" action="/">
+  <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Search by keyword">
+</form>

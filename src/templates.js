@@ -20,27 +20,7 @@ var lineno = null;
 var colno = null;
 var output = "";
 try {
-if(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"query", env.autoesc)) {
-output += "\n<h1>\n  ";
-output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"results", env.autoesc)),"length", env.autoesc), env.autoesc);
-output += " ";
-output += runtime.suppressValue((lineno = 2, colno = 34, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "pluralise"), "pluralise", ["result",runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"results", env.autoesc)),"length", env.autoesc)])), env.autoesc);
-output += "\n    for <b>";
-output += runtime.suppressValue(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"query", env.autoesc), env.autoesc);
-output += "</b>\n  ";
-var t_1;
-t_1 = runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"timing", env.autoesc) / 1000;
-frame.set("timing", t_1);
-if(!frame.parent) {
-context.setVariable("timing", t_1);
-context.addExport("timing");
-}
-output += "\n  <span class=\"speed\">(took ";
-output += runtime.suppressValue(env.getFilter("round").call(context, t_1,6,"floor"), env.autoesc);
-output += "s)</span>\n</h1>\n";
-;
-}
-output += "\n";
+output += "<nav>\n  <a href=\"/submit\" class=\"submit\">Submit a site</a>\n  <a href=\"/\" class=\"browse\">Browse sites</a>\n</nav>\n<form class=\"form-search\" action=\"/\">\n  <input type=\"search\" name=\"q\" title=\"\" x-inputmode=\"verbatim\" autocapitalize=\"off\" autocomplete=\"off\" autocorrect=\"off\" placeholder=\"Search by keyword\">\n</form>\n";
 cb(null, output);
 ;
 } catch (e) {
@@ -65,6 +45,41 @@ output += runtime.suppressValue((lineno = 2, colno = 36, runtime.callWrap(runtim
 output += "\n      for <b>";
 output += runtime.suppressValue(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"query", env.autoesc), env.autoesc);
 output += "</b>\n    ";
+var t_1;
+t_1 = runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"timing", env.autoesc) / 1000;
+frame.set("timing", t_1);
+if(!frame.parent) {
+context.setVariable("timing", t_1);
+context.addExport("timing");
+}
+output += "\n    <span class=\"speed\">(took ";
+output += runtime.suppressValue(env.getFilter("round").call(context, t_1,6,"floor"), env.autoesc);
+output += "s)</span>\n  </h1>\n";
+;
+}
+output += "\n";
+cb(null, output);
+;
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+return {
+root: root
+};
+})();
+})();
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["results-header.html"] = (function() {function root(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+if(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"query", env.autoesc)) {
+output += "\n  <h1>\n    ";
+output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"results", env.autoesc)),"length", env.autoesc), env.autoesc);
+output += " ";
+output += runtime.suppressValue((lineno = 2, colno = 36, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "pluralise"), "pluralise", ["result",runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"results", env.autoesc)),"length", env.autoesc)])), env.autoesc);
+output += "\n    ";
 var t_1;
 t_1 = runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "data")),"timing", env.autoesc) / 1000;
 frame.set("timing", t_1);

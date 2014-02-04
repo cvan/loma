@@ -148,14 +148,14 @@ main {
   padding: 15px;
 }
 
-.header {
+nav {
   background: #1799dd;  /* #ff9500 */
   font-weight: 600;
   height: 40px;
   padding: 0;
 }
 
-.header a {
+nav a {
   color: #fff;
   display: none;
   padding: 10px 15px;
@@ -196,16 +196,16 @@ a.avatar:hover img {
   float: right;
 }
 
-.header .submit::before {
+nav .submit::before {
   content: "\271a\00a0\00a0";  /* ✚ */
 }
 
-.header a:hover {
+nav a:hover {
   background: #fff;
   color: #1799dd;
 }
 
-.header .browse::before {
+nav .browse::before {
   content: "\21ea";  /* ⇪ */
   display: inline-block;
   -webkit-transform: rotate(-90deg);

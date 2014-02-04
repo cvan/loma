@@ -312,4 +312,10 @@ function index() {
 
 var indexed = index();
 
+render('header', function(res) {
+  $('.header').innerHTML = res;
+  q = $('input[name=q]');
+  q.value = GET.q || '';
+});
+
 })();
