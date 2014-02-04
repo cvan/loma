@@ -26,6 +26,33 @@ $.delegate = function(type, sel, handler) {
   }, false);
 };
 
+function parseQueryString(qs) {
+  if (!qs) {
+    qs = window.location.search.substr(1);
+  }
+  var chunks;
+  var result = {};
+  qs.split('&').forEach(function(val) {
+    chunks = val.split('=');
+    if (chunks[0]) {
+      result[chunks[0]] = decodeURIComponent(chunks[1] || '');
+    }
+  });
+  return result;
+}
+
+function serialize(obj) {
+  var qs = [];
+  Object.keys(obj).forEach(function(key) {
+    if (obj[key]) {
+      qs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
+    }
+  });
+  return qs.join('&');
+}
+
+var GET = parseQueryString();
+
 var titles = {
   '/': 'Mobile sites',
   '/search': 'Search',
@@ -49,8 +76,7 @@ app.load = function(url) {
 };
 
 app.get('/', function(req) {
-  var qsSearch = /[\?&]q=([\w\-]+)/i.exec(window.location.search);
-  q.value = qsSearch && qsSearch[1];
+  GET = parseQueryString();
   document.title = getTitle(req.url);
   views.search();
 });
@@ -79,9 +105,7 @@ $.delegate('click', 'a[href^="/"]', function(e) {
   app.load(e.target.getAttribute('href'));
 });
 
-var qsDebug = /[\?&]debug=([\w\-]+)/i.exec(window.location.search);
-qsDebug = qsDebug && qsDebug[1];
-if (qsDebug) {
+if (GET.debug) {
   window.location.href = 'debug.html';
 }
 
@@ -130,8 +154,8 @@ function Cache() {
 }
 var cache = new Cache();
 
-var q = $('[name=q]');
-
+var q = $('input[name=q]');
+q.value = GET.q || '';
 var previousQuery = null;
 var previousResults = null;
 
@@ -199,13 +223,14 @@ function renderResults(data) {
   data.timing = performance.now() - data.timeStart;
 
   // Update location bar based on search term.
-  if (q.value) {
-    window.history.replaceState({}, getTitle('/'), '/?q=' + q.value);
-  } else if (document.location.search) {
-    window.history.replaceState({}, getTitle('/'), '/');
+  GET.q = q.value || '';
+  var serialized = serialize(GET);
+  var dest = serialized ? ('/?' + serialized) : '/';
+  if (window.location.href !== dest) {
+    window.history.replaceState({}, getTitle('/'), dest);
   }
 
-  render('header', {data: data}, function(res) {
+  render('results-header', {data: data}, function(res) {
     $('main header').innerHTML = res;
   });
 
