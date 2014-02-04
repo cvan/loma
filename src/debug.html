@@ -25,7 +25,7 @@
   </head>
   <body>
     <form>
-      <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Search for a fruit" autofocus required>
+      <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Search by keyword" autofocus required>
     </form>
     <section class="results">
       <h1></h1>
@@ -38,7 +38,7 @@
 
       var methods = {
         'log': log,
-        'loaded': search,
+        'indexed': search,
         'results': renderResults
       };
 
@@ -47,7 +47,7 @@
         methods[e.data.type](e.data.data);
       });
       worker.postMessage({
-        type: 'run',
+        type: 'index',
         data: {
           url: '../data/app-processed-docs.json',
           fields: {
