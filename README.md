@@ -28,3 +28,8 @@ And to automatically recompile templates upon file changes:
 To run both simultaneously:
 
     DEBUG=1 OPEN=1 grunt
+
+To build production-ready `index.html` and minified assets to a `dist/`
+directory:
+
+    grunt minify
