@@ -1,6 +1,8 @@
 define('worker', ['log'], function(log) {
+  var console = log('worker');
+
   var methods = {
-    'log': log.log
+    'log': console.log
   };
 
   var worker = new Worker('lib/worker.js');

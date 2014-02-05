@@ -1,4 +1,4 @@
-(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["browse.html"] = (function() {function root(env, context, frame, runtime, cb) {
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["src/templates/browse.html"] = (function() {function root(env, context, frame, runtime, cb) {
 var lineno = null;
 var colno = null;
 var output = "";
@@ -15,7 +15,7 @@ root: root
 };
 })();
 })();
-(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["header.html"] = (function() {function root(env, context, frame, runtime, cb) {
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["src/templates/header.html"] = (function() {function root(env, context, frame, runtime, cb) {
 var lineno = null;
 var colno = null;
 var output = "";
@@ -24,8 +24,16 @@ output += "<nav>\n  <a href=\"/submit\" class=\"submit\">";
 output += runtime.suppressValue((lineno = 1, colno = 37, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Submit a site","navSubmit"])), env.autoesc);
 output += "</a>\n  <a href=\"/\" class=\"browse\">";
 output += runtime.suppressValue((lineno = 2, colno = 31, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Browse sites","navBrowse"])), env.autoesc);
+output += "</a>\n  <a class=\"button only-signed-out sign-in\">";
+output += runtime.suppressValue((lineno = 3, colno = 46, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Sign in","navSignIn"])), env.autoesc);
+output += "</a>\n  <a class=\"button only-signed-in sign-out\">";
+output += runtime.suppressValue((lineno = 4, colno = 46, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Sign out","navSignOut"])), env.autoesc);
+output += "</a>\n  <a class=\"auth only-signed-in avatar sign-out\">\n     <img src=\"";
+output += runtime.suppressValue((lineno = 6, colno = 31, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"getSetting", env.autoesc), "user[\"getSetting\"]", ["avatar"])), env.autoesc);
+output += "\"> ";
+output += runtime.suppressValue((lineno = 6, colno = 61, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"getSetting", env.autoesc), "user[\"getSetting\"]", ["email"])), env.autoesc);
 output += "</a>\n</nav>\n<form class=\"form-search\" action=\"/\">\n  <input type=\"search\" name=\"q\" title=\"\" x-inputmode=\"verbatim\" autocapitalize=\"off\" autocomplete=\"off\" autocorrect=\"off\" placeholder=\"";
-output += runtime.suppressValue((lineno = 5, colno = 137, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Search by keyword","searchPlaceholder"])), env.autoesc);
+output += runtime.suppressValue((lineno = 9, colno = 137, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Search by keyword","searchPlaceholder"])), env.autoesc);
 output += "\">\n</form>\n";
 cb(null, output);
 ;
@@ -38,7 +46,7 @@ root: root
 };
 })();
 })();
-(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["heading.html"] = (function() {function root(env, context, frame, runtime, cb) {
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["src/templates/heading.html"] = (function() {function root(env, context, frame, runtime, cb) {
 var lineno = null;
 var colno = null;
 var output = "";
@@ -75,7 +83,7 @@ root: root
 };
 })();
 })();
-(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["results-header.html"] = (function() {function root(env, context, frame, runtime, cb) {
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["src/templates/results-header.html"] = (function() {function root(env, context, frame, runtime, cb) {
 var lineno = null;
 var colno = null;
 var output = "";
@@ -108,7 +116,7 @@ root: root
 };
 })();
 })();
-(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["results.html"] = (function() {function root(env, context, frame, runtime, cb) {
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["src/templates/results.html"] = (function() {function root(env, context, frame, runtime, cb) {
 var lineno = null;
 var colno = null;
 var output = "";
@@ -156,7 +164,7 @@ root: root
 };
 })();
 })();
-(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["submit.html"] = (function() {function root(env, context, frame, runtime, cb) {
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["src/templates/submit.html"] = (function() {function root(env, context, frame, runtime, cb) {
 var lineno = null;
 var colno = null;
 var output = "";

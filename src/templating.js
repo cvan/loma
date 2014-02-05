@@ -1,10 +1,10 @@
-define('templating', ['utils'], function(utils) {
+define('templating', ['user', 'utils'], function(user, utils) {
   function render(name, ctx, cb) {
     if (typeof ctx === 'function') {
       cb = ctx;
       ctx = {};
     }
-    return env.render(name + '.html', ctx, function(err, res) {
+    return env.render('src/templates/' + name + '.html', ctx, function(err, res) {
       if (err) {
         return console.error(err);
       }
@@ -41,6 +41,16 @@ define('templating', ['utils'], function(utils) {
   }
 
   env.addFunction('_', env.makeSafe(_l));
+
+  // The exposed user object should know nothing of tokens.
+  var userObj = {
+    getSetting: user.getSetting,
+    getSettings: user.getSettings,
+    getPermission: user.getPermission,
+    loggedIn: user.loggedIn
+  };
+
+  env.addFunction('user', userObj);
 
   return {
     _l: _l,

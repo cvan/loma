@@ -1,7 +1,8 @@
 define('views/search',
-       ['cache', 'dom', 'pages', 'templating', 'utils', 'worker'],
-       function(cache, $, pages, templating, utils, worker) {
+       ['cache', 'dom', 'log', 'pages', 'templating', 'utils', 'worker'],
+       function(cache, $, log, pages, templating, utils, worker) {
   cache = new cache();
+  var console = log('search');
   var GET;
   var indexed = index();
   var q;

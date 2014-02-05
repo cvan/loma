@@ -18,6 +18,7 @@ document.webL10n.ready(function() {
   var $ = require('dom');
   var pages = require('pages');
   var templating = require('templating');
+  var user = require('user');
 
   var app = new routes();
 
@@ -54,6 +55,8 @@ document.webL10n.ready(function() {
     app.load('/');
   });
 
+  $.body.dataset.auth = user.loggedIn();
+
   templating.render('header', function(res) {
     $('.header').innerHTML = res;
 
@@ -61,6 +64,14 @@ document.webL10n.ready(function() {
     app.load(document.location.href);
   });
 
+  // Initialise login logic when Persona loads.
+  var personaLoaded = false;
+  personaLoaded = setInterval(function() {
+    if ('id' in navigator) {
+      require('login');
+      clearInterval(personaLoaded);
+    }
+  }, 100);
 });
 
 })();

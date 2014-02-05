@@ -13,6 +13,10 @@ Then install our dependencies:
 
     npm install
 
+For local settings:
+
+    cp src/settings_local.js.dist src/settings_local.js
+
 
 ## Development
 

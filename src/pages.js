@@ -1,4 +1,6 @@
-define('pages', ['templating', 'utils'], function(templating, utils) {
+define('pages',
+       ['settings', 'templating', 'utils'],
+       function(settings, templating, utils) {
   var titles = {
     '/': templating._l('Mobile sites', 'titleDefault'),
     '/search': templating._l('Search', 'titleSearch'),
@@ -10,7 +12,7 @@ define('pages', ['templating', 'utils'], function(templating, utils) {
   }
 
   function getTitle(pathname) {
-    return (titles[pathname] || titles['/']) + ' | loma';
+    return (titles[pathname] || titles['/']) + ' | ' + settings.titleSuffix;
   }
 
   return {

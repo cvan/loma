@@ -193,19 +193,27 @@ a.avatar:hover img {
 }
 
 .sign-in {
+  background: url(login.svg) 15px 50% no-repeat;
   float: right;
+  padding-left: 36px;  /* 15px for left padding + 16px for icon + 6px for margin */
 }
 
 nav .submit::before {
+  color: #6d5;
+  text-shadow: 0 0 1px #160, 0 0 1px #160, 0 0 1px #160, 0 0 1px #160;
   content: "\271a\00a0\00a0";  /* ✚ */
 }
 
-nav a:hover {
-  background: #fff;
-  color: #1799dd;
+/*
+nav .submit:hover::before {
+  color: #160;
+  text-shadow: 0 0 1px #6d5, 0 0 1px #6d5, 0 0 1px #6d5, 0 0 1px #6d5;
 }
+*/
 
 nav .browse::before {
+  color: #fd0;
+  text-shadow: 0 0 1px #814, 0 0 1px #814, 0 0 1px #814, 0 0 1px #814;
   content: "\21ea";  /* ⇪ */
   display: inline-block;
   -webkit-transform: rotate(-90deg);
@@ -214,6 +222,18 @@ nav .browse::before {
   top: 1px;
   left: -3px;
   position: relative;
+}
+
+/*
+nav .browse:hover::before {
+  color: #814;
+  text-shadow: 0 0 1px #fd0, 0 0 1px #fd0, 0 0 1px #fd0, 0 0 1px #fd0;
+}
+*/
+
+nav a:hover {
+  background-color: #fff;
+  color: #1799dd;
 }
 
 .form-search {
@@ -307,4 +327,9 @@ h1 {
   .results li {
     width: 100%;
   }
+}
+
+[data-auth="true"] .only-signed-out,
+[data-auth="false"] .only-signed-in {
+  display: none;
 }

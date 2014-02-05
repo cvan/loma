@@ -1,4 +1,26 @@
 define('utils', [], function() {
+  function defaults(obj) {
+    // Fill in a given object with default properties.
+    Array.prototype.slice.call(arguments, 1).forEach(function(source) {
+      if (source) {
+        for (var prop in source) {
+          if (obj[prop] === void 0) {
+            obj[prop] = source[prop];
+          }
+        }
+      }
+    });
+    return obj;
+  };
+
+  function encodeURIComponent(uri) {
+    return window.encodeURIComponent(uri).replace(/%20/g, '+');
+  }
+
+  function decodeURIComponent(uri) {
+    return window.decodeURIComponent(uri.replace(/\+/g, ' '));
+  }
+
   var formatRe = /\{([^}]+)\}/g;
   function format(s, args) {
     if (!s) {
@@ -43,10 +65,13 @@ define('utils', [], function() {
         qs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
       }
     });
-    return qs.join('&');
+    return qs.join('&') || null;
   }
 
   return {
+    defaults: defaults,
+    encodeURIComponent: encodeURIComponent,
+    decodeURIComponent: decodeURIComponent,
     format: format,
     parseLink: parseLink,
     parseQueryString: parseQueryString,
