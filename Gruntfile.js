@@ -82,7 +82,17 @@ module.exports = function(grunt) {
           'src/lib/nunjucks-slim.js',
           'src/lib/routes.js',
           'src/lib/promise-0.1.1.js',
-          'src/main.js',
+          'src/amd.js',
+          'src/log.js',
+          'src/dom.js',
+          'src/utils.js',
+          'src/cache.js',
+          'src/templating.js',
+          'src/worker.js',
+          'src/pages.js',
+          'src/views/search.js',
+          'src/views/submit.js',
+          'src/main.js'
         ],
         dest: 'dist/main.min.js'
       }
