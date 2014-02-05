@@ -25,5 +25,40 @@ define('dom', [], function() {
     }, false);
   };
 
+  function reqResponse(xhr) {
+    var data = xhr.responseText;
+    if ((xhr.getResponseHeader('Content-Type') || '').split(';', 1)[0].indexOf('json') !== -1) {
+      try {
+        return JSON.parse(data);
+      } catch(e) {
+        // Oh well.
+        return {};
+      }
+    }
+    return data || null;
+  }
+
+  $.post = function(url, params) {
+    return new Promise(function(resolve, reject) {
+      params = serialize(params || {});
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('post', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.send(params);
+
+      xhr.addEventListener('load', function() {
+        var res = reqResponse(xhr);
+
+        var statusCode = xhr.status;
+        if (statusCode < 200 || statusCode > 300) {
+          return reject(res, xhr);
+        }
+
+        return resolve(res, xhr);
+      }, false);
+    });
+  };
+
   return $;
 });
