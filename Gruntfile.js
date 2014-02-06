@@ -133,10 +133,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-connect-rewrite');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-processhtml');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadTasks('./node_modules/grunt-nunjucks/tasks');
+  grunt.loadNpmTasks('grunt-nunjucks');
+  grunt.loadNpmTasks('grunt-processhtml');
 
   grunt.registerTask('server',
     ['configureRewriteRules', 'connect:development']);
