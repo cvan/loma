@@ -36,7 +36,11 @@ define('user',
   }
 
   function getSetting(setting, default_) {
-    return settings[setting] || default_;
+    setting = settings[setting];
+    if (typeof setting === 'undefined') {
+      return default_;
+    }
+    return setting;
   }
 
   function getPermission(setting) {

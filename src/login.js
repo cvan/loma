@@ -1,6 +1,6 @@
 define('login',
-       ['capabilities', 'log', 'dom', 'templating', 'user'],
-       function(capabilities, log, $, templating, user) {
+       ['capabilities', 'log', 'dom', 'templating', 'url', 'user'],
+       function(capabilities, log, $, templating, url, user) {
   if (!capabilities.persona) {
     return;
   }
@@ -16,7 +16,17 @@ define('login',
     }
   };
 
-  $.delegate('click', '.sign-in', function() {
+  $.delegate('login', $.body, function() {
+    console.log('login!');
+    $.body.dataset.auth = 'true';
+  });
+
+  $.delegate('login_fail logout', $.body, function() {
+    console.log('logout!');
+    $.body.dataset.auth = 'false';
+  });
+
+  $.delegate('click', '.login', function() {
     console.log('Logging user in');
     navigator.id.request(loginOpts);
   });
@@ -29,14 +39,15 @@ define('login',
   });
 
   navigator.id.watch({
-    loggedInUser: localStorage.email,
+    loggedInUser: user.getSetting('email'),
     onlogin: gotVerifiedEmail,
     onlogout: logoutUser
   });
 
   function logoutUser() {
-    $.body.dataset.auth = false;
-    $.trigger($.body, 'logout');
+    if ($.body.dataset.auth === 'true') {
+      $.trigger($.body, 'logout');
+    }
   }
 
   function loginSuccess(data, xhr) {
@@ -46,7 +57,6 @@ define('login',
       user.updatePermissions(data.permissions);
       console.log('Login succeeded; preparing the app');
 
-      $.body.dataset.auth = 'true';
       $.trigger($.body, 'login');
 
       templating.render('header', function(res) {
@@ -72,6 +82,8 @@ define('login',
         isMobile: capabilities.mobileLogin
     };
 
-    $.post('http://localhost:5000/user/login', data).then(loginSuccess, loginError);
+    $.post(url('login'), data).then(loginSuccess, loginError);
   }
+
+  $.trigger($.body, user.loggedIn() ? 'login' : 'logout');
 });

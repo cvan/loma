@@ -1,4 +1,4 @@
-(function() {
+define('main', [], function() {
 
 var $ = require('dom');
 var GET = require('utils').parseQueryString();
@@ -28,9 +28,10 @@ document.webL10n.ready(function() {
   };
 
   Object.keys(views).forEach(function(path) {
+    var view = require('views/' + views[path]);
     app.get(path, function(req) {
       document.title = pages.getTitle(req.url);
-      var view = require('views/' + views[path]).init();
+      view.init();
     });
   });
 
@@ -38,12 +39,7 @@ document.webL10n.ready(function() {
     window.history.pushState(undefined, pages.getTitle(url), url);
 
     // We must have the exact pathname (no querystring parameters, etc.).
-    var path = pages.getPath(url);
-    if (url !== path) {
-      url = path;
-    }
-
-    app.test(url);
+    app.test(pages.getPath(url));
   };
 
   $.delegate('click', 'a[href^="/"]', function(e) {
@@ -54,8 +50,6 @@ document.webL10n.ready(function() {
   $.delegate('keypress', 'body:not(.results) input[name=q]', function(e) {
     app.load('/');
   });
-
-  $.body.dataset.auth = user.loggedIn();
 
   templating.render('header', function(res) {
     $('.header').innerHTML = res;
@@ -74,4 +68,6 @@ document.webL10n.ready(function() {
   }, 100);
 });
 
-})();
+});
+
+require('main');

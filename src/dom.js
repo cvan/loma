@@ -12,21 +12,26 @@ define('dom', ['utils'], function(utils) {
   $.win = window;
 
   $.matches = function(el, sel) {
-    var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
-                          el.oMatchesSelector || el.matchesSelector;
-    return matchesSelector.call(el, sel);
+    if (typeof sel === 'string') {
+      var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
+                            el.oMatchesSelector || el.matchesSelector;
+      return matchesSelector.call(el, sel);
+    }
+    return el === sel;
   };
 
   $.delegate = function(type, sel, handler) {
-    document.addEventListener(type, function(e) {
-      var parent = e.target;
-      while (parent && parent !== document) {
-        if ($.matches(parent, sel)) {
-          handler(e);
+    type.split(' ').forEach(function(t) {
+      document.addEventListener(t, function(e) {
+        var parent = e.target;
+        while (parent && parent !== document) {
+          if ($.matches(parent, sel)) {
+            handler(e);
+          }
+          parent = parent.parentNode;
         }
-        parent = parent.parentNode;
-      }
-    }, false);
+      }, false);
+    });
   };
 
   function reqResponse(xhr) {
@@ -42,13 +47,18 @@ define('dom', ['utils'], function(utils) {
     return data || null;
   }
 
-  $.post = function(url, params) {
+  $.post = function(url, params, headers) {
     return new Promise(function(resolve, reject) {
       params = utils.serialize(params || {});
 
       var xhr = new XMLHttpRequest();
       xhr.open('post', url, true);
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      if (headers) {
+        Object.keys(headers).forEach(function(header) {
+          xhr.setRequestHeader(header, headers[header]);
+        });
+      }
       xhr.send(params);
 
       xhr.addEventListener('load', function() {
@@ -67,9 +77,11 @@ define('dom', ['utils'], function(utils) {
   if (!('CustomEvent' in window)) {
     // For IE 9/10 lol.
     function CustomEvent(eventName, params) {
-      params = params || {bubbles: false, cancelable: false, detail: undefined};
+      params = params || {bubbles: false, cancelable: false,
+                          detail: undefined};
       var e = document.createEvent('CustomEvent');
-      e.initCustomEvent(eventName, params.bubbles, params.cancelable, params.detail);
+      e.initCustomEvent(eventName, params.bubbles, params.cancelable,
+                        params.detail);
       return e;
     }
     CustomEvent.prototype = window.CustomEvent.prototype;
@@ -77,7 +89,8 @@ define('dom', ['utils'], function(utils) {
   }
 
   $.trigger = function(el, eventName, params) {
-    return el.dispatchEvent(new CustomEvent(eventName, params));
+    var e = new CustomEvent(eventName, {bubbles: true, detail: params});
+    return el.dispatchEvent(e);
   };
 
   return $;

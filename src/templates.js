@@ -20,20 +20,27 @@ var lineno = null;
 var colno = null;
 var output = "";
 try {
-output += "<nav>\n  <a href=\"/submit\" class=\"submit\">";
-output += runtime.suppressValue((lineno = 1, colno = 37, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Submit a site","navSubmit"])), env.autoesc);
-output += "</a>\n  <a href=\"/\" class=\"browse\">";
-output += runtime.suppressValue((lineno = 2, colno = 31, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Browse sites","navBrowse"])), env.autoesc);
-output += "</a>\n  <a class=\"button only-signed-out sign-in\">";
-output += runtime.suppressValue((lineno = 3, colno = 46, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Sign in","navSignIn"])), env.autoesc);
+output += "<nav>\n  ";
+if(!(lineno = 1, colno = 23, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"loggedIn", env.autoesc), "user[\"loggedIn\"]", [])) || (lineno = 1, colno = 44, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"getSetting", env.autoesc), "user[\"getSetting\"]", ["vouched"]))) {
+output += "\n    <a href=\"/submit\" class=\"submit";
+output += runtime.suppressValue((!(lineno = 2, colno = 65, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"loggedIn", env.autoesc), "user[\"loggedIn\"]", []))?" login":""), env.autoesc);
+output += "\">";
+output += runtime.suppressValue((lineno = 2, colno = 72, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Submit a site","navSubmit"])), env.autoesc);
+output += "</a>\n  ";
+;
+}
+output += "\n  <a href=\"/\" class=\"browse\">";
+output += runtime.suppressValue((lineno = 4, colno = 31, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Browse sites","navBrowse"])), env.autoesc);
+output += "</a>\n  <a class=\"button only-signed-out sign-in login\">";
+output += runtime.suppressValue((lineno = 5, colno = 52, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Sign in","navSignIn"])), env.autoesc);
 output += "</a>\n  <a class=\"button only-signed-in sign-out\">";
-output += runtime.suppressValue((lineno = 4, colno = 46, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Sign out","navSignOut"])), env.autoesc);
-output += "</a>\n  <a class=\"auth only-signed-in avatar sign-out\">\n     <img src=\"";
-output += runtime.suppressValue((lineno = 6, colno = 31, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"getSetting", env.autoesc), "user[\"getSetting\"]", ["avatar"])), env.autoesc);
+output += runtime.suppressValue((lineno = 6, colno = 46, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Sign out","navSignOut"])), env.autoesc);
+output += "</a>\n  <a class=\"auth only-signed-in avatar sign-out\">\n    <img src=\"";
+output += runtime.suppressValue((lineno = 8, colno = 30, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"getSetting", env.autoesc), "user[\"getSetting\"]", ["avatar"])), env.autoesc);
 output += "\"> ";
-output += runtime.suppressValue((lineno = 6, colno = 61, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"getSetting", env.autoesc), "user[\"getSetting\"]", ["email"])), env.autoesc);
+output += runtime.suppressValue((lineno = 8, colno = 60, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"getSetting", env.autoesc), "user[\"getSetting\"]", ["email"])), env.autoesc);
 output += "</a>\n</nav>\n<form class=\"form-search\" action=\"/\">\n  <input type=\"search\" name=\"q\" title=\"\" x-inputmode=\"verbatim\" autocapitalize=\"off\" autocomplete=\"off\" autocorrect=\"off\" placeholder=\"";
-output += runtime.suppressValue((lineno = 9, colno = 137, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Search by keyword","searchPlaceholder"])), env.autoesc);
+output += runtime.suppressValue((lineno = 11, colno = 137, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Search by keyword","searchPlaceholder"])), env.autoesc);
 output += "\">\n</form>\n";
 cb(null, output);
 ;
@@ -172,6 +179,32 @@ try {
 output += "<h1>";
 output += runtime.suppressValue((lineno = 0, colno = 6, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Submit a site","navSubmit"])), env.autoesc);
 output += "</h1>\n";
+if((lineno = 1, colno = 17, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"loggedIn", env.autoesc), "user[\"loggedIn\"]", []))) {
+output += "\n  ";
+if((lineno = 2, colno = 21, runtime.callWrap(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "user")),"getSetting", env.autoesc), "user[\"getSetting\"]", ["vouched"]))) {
+output += "\n    <form class=\"submit-form\">\n      <label>\n        <h2>";
+output += runtime.suppressValue((lineno = 5, colno = 14, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Site URL","siteURL"])), env.autoesc);
+output += "</h2>\n        <input class=\"large\" type=\"url\" name=\"app_url\" placeholder=\"http://\" required>\n      </label>\n      <label>\n        <h2>";
+output += runtime.suppressValue((lineno = 9, colno = 14, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["Site name","siteName"])), env.autoesc);
+output += "</h2>\n        <input class=\"large\" type=\"text\" name=\"name\" required>\n      </label>\n      <button class=\"button submit\" type=\"submit\">Submit site</button>\n    </form>\n  ";
+;
+}
+else {
+output += "\n    <p class=\"notice\">";
+output += runtime.suppressValue((lineno = 15, colno = 24, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["You must be a vouched Mozillian to submit a site.","submitNoticeMozillian"])), env.autoesc);
+output += "</p>\n  ";
+;
+}
+output += "\n";
+;
+}
+else {
+output += "\n  <p class=\"notice\">";
+output += runtime.suppressValue((lineno = 18, colno = 22, runtime.callWrap(runtime.contextOrFrameLookup(context, frame, "_"), "_", ["You must be logged in to submit a site.","submitNotice"])), env.autoesc);
+output += "</p>\n";
+;
+}
+output += "\n";
 cb(null, output);
 ;
 } catch (e) {

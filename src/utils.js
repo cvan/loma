@@ -1,4 +1,8 @@
 define('utils', [], function() {
+  function baseurl(url) {
+    return url.split('?')[0];
+  }
+
   function defaults(obj) {
     // Fill in a given object with default properties.
     Array.prototype.slice.call(arguments, 1).forEach(function(source) {
@@ -11,7 +15,7 @@ define('utils', [], function() {
       }
     });
     return obj;
-  };
+  }
 
   function encodeURIComponent(uri) {
     return window.encodeURIComponent(uri).replace(/%20/g, '+');
@@ -58,6 +62,27 @@ define('utils', [], function() {
     return result;
   }
 
+  function urlencode(kwargs) {
+    if (typeof kwargs === 'string') {
+      return encodeURIComponent(kwargs);
+    }
+    return Object.keys(kwargs).sort().map(function(key) {
+      var value = kwargs[key];
+      if (value === undefined) {
+        return encodeURIComponent(key);
+      }
+      return encodeURIComponent(key) + '=' + encodeURIComponent(value);
+    }).join('&');
+  }
+
+  function querystring(url) {
+    var qpos = url.indexOf('?');
+    if (qpos === -1) {
+      return {};
+    }
+    return parseQueryString(url.substr(qpos + 1));
+  }
+
   function serialize(obj) {
     var qs = [];
     Object.keys(obj).forEach(function(key) {
@@ -68,6 +93,11 @@ define('utils', [], function() {
     return qs.join('&') || null;
   }
 
+
+  function urlparams(url, kwargs) {
+    return baseurl(url) + '?' + urlencode(defaults(kwargs, querystring(url)));
+  }
+
   return {
     defaults: defaults,
     encodeURIComponent: encodeURIComponent,
@@ -75,6 +105,7 @@ define('utils', [], function() {
     format: format,
     parseLink: parseLink,
     parseQueryString: parseQueryString,
-    serialize: serialize
+    serialize: serialize,
+    urlparams: urlparams
   };
 });

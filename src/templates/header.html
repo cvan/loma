@@ -1,10 +1,12 @@
 <nav>
-  <a href="/submit" class="submit">{{ _('Submit a site', 'navSubmit') }}</a>
+  {% if not user.loggedIn() or user.getSetting('vouched') %}
+    <a href="/submit" class="submit{{ ' login' if not user.loggedIn() }}">{{ _('Submit a site', 'navSubmit') }}</a>
+  {% endif %}
   <a href="/" class="browse">{{ _('Browse sites', 'navBrowse') }}</a>
-  <a class="button only-signed-out sign-in">{{ _('Sign in', 'navSignIn') }}</a>
+  <a class="button only-signed-out sign-in login">{{ _('Sign in', 'navSignIn') }}</a>
   <a class="button only-signed-in sign-out">{{ _('Sign out', 'navSignOut') }}</a>
   <a class="auth only-signed-in avatar sign-out">
-     <img src="{{ user.getSetting('avatar') }}"> {{ user.getSetting('email') }}</a>
+    <img src="{{ user.getSetting('avatar') }}"> {{ user.getSetting('email') }}</a>
 </nav>
 <form class="form-search" action="/">
   <input type="search" name="q" title="" x-inputmode="verbatim" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="{{ _('Search by keyword', 'searchPlaceholder') }}">

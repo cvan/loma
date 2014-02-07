@@ -1,1 +1,20 @@
 <h1>{{ _('Submit a site', 'navSubmit') }}</h1>
+{% if user.loggedIn() %}
+  {% if user.getSetting('vouched') %}
+    <form class="submit-form">
+      <label>
+        <h2>{{ _('Site URL', 'siteURL') }}</h2>
+        <input class="large" type="url" name="app_url" placeholder="http://" required>
+      </label>
+      <label>
+        <h2>{{ _('Site name', 'siteName') }}</h2>
+        <input class="large" type="text" name="name" required>
+      </label>
+      <button class="button submit" type="submit">Submit site</button>
+    </form>
+  {% else %}
+    <p class="notice">{{ _('You must be a vouched Mozillian to submit a site.', 'submitNoticeMozillian') }}</p>
+  {% endif %}
+{% else %}
+  <p class="notice">{{ _('You must be logged in to submit a site.', 'submitNotice') }}</p>
+{% endif %}

@@ -47,6 +47,8 @@ pre code {
   white-space: pre-wrap;
 }
 
+main button,
+main .button,
 input[type="text"],
 input[type="tel"],
 input[type="datetime"],
@@ -55,11 +57,10 @@ input[type="date"],
 input[type="url"],
 input[type="search"],
 textarea {
-  -webkit-transition: border 0.3s ease-in;
   background-color: #fff;
   border-radius: 2px;
   border: 1px solid #ccc;
-  box-shadow: 0 0 1px rgba(0,0,0,0.2) inset;
+  box-shadow: 0 0 1px rgba(0,0,0,.2) inset;
   color: #333;
   font-family: inherit;
   font-size: 13px;
@@ -67,7 +68,7 @@ textarea {
   margin: 0;
   padding: 1px 2px;
   position: relative;
-  transition: border 0.3s ease-in;
+  transition: border .3s ease-in, box-shadow .3s ease-in;
   z-index: 2;
 }
 
@@ -96,7 +97,7 @@ input:focus,
 textarea:focus {
   outline: none;
   border-color: #5ca9e4;
-  box-shadow: 0 0 0 2px rgba(70,161,231,0.3), 0 1px 2px rgba(0,0,0,0.2) inset;
+  box-shadow: 0 0 0 2px rgba(70,161,231,.3), 0 1px 2px rgba(0,0,0,.2) inset;
 }
 
 input[type=checkbox],
@@ -109,7 +110,8 @@ a:not([href]),
 button,
 input[type=button],
 input[type=reset],
-input[type=submit] {
+input[type=submit],
+label {
   cursor: pointer;
 }
 
@@ -146,6 +148,14 @@ label {
 form,
 main {
   padding: 15px;
+}
+
+h1 {
+  margin: 5px 15px 0;
+}
+
+.submit main {
+  padding: 20px 15px 15px;
 }
 
 nav {
@@ -194,14 +204,15 @@ a.avatar:hover img {
 
 .sign-in {
   background: url(login.svg) 15px 50% no-repeat;
+  display: none;
   float: right;
-  padding-left: 36px;  /* 15px for left padding + 16px for icon + 6px for margin */
+  padding-left: 38px;  /* 15px for left padding + 16px for icon + 8px for margin */
 }
 
 nav .submit::before {
   color: #6d5;
-  text-shadow: 0 0 1px #160, 0 0 1px #160, 0 0 1px #160, 0 0 1px #160;
   content: "\271a\00a0\00a0";  /* ✚ */
+  text-shadow: 0 0 1px #160, 0 0 1px #160, 0 0 1px #160, 0 0 1px #160;
 }
 
 /*
@@ -213,14 +224,14 @@ nav .submit:hover::before {
 
 nav .browse::before {
   color: #fd0;
-  text-shadow: 0 0 1px #814, 0 0 1px #814, 0 0 1px #814, 0 0 1px #814;
   content: "\21ea";  /* ⇪ */
   display: inline-block;
+  left: -3px;
+  text-shadow: 0 0 1px #814, 0 0 1px #814, 0 0 1px #814, 0 0 1px #814;
   -webkit-transform: rotate(-90deg);
   transform: rotate(-90deg);
   margin-right: 4px;
   top: 1px;
-  left: -3px;
   position: relative;
 }
 
@@ -311,25 +322,94 @@ h1 {
   margin-left: 2px;
 }
 
+[data-auth="true"] .only-signed-out,
+[data-auth="false"] .only-signed-in {
+  display: none;
+}
+
+form label {
+  margin-bottom: 25px;
+}
+
+form label h2 {
+  margin-bottom: 5px;
+}
+
+input {
+  display: block;
+  width: 50%;
+}
+
+.button.submit {
+  background: #0e7;
+  border-color: #cfc;
+  box-shadow: 0 0 1px rgba(0,180,0,.2);
+  color: #fff;
+  font-weight: 600;
+  margin-top: 5px;
+  padding: 15px;
+}
+
+.button.submit:active,
+.button.submit:hover {
+  border-color: #18a011;
+  box-shadow: 0 0 0 2px rgba(24,160,17,.3);
+  color: #063;
+}
+
+.button.submit:active {
+  box-shadow: 0 0 10px rgba(0,80,0,.4) inset;
+  color: #999;
+  opacity: .8;
+}
+
+.button.submit:active::before {
+  opacity: .4;
+}
+
+.button.submit::before {
+  color: #dfe;
+  content: "\271a\00a0\00a0";  /* ✚ */
+  text-shadow: 0 0 1px #160, 0 0 1px #160, 0 0 1px #160, 0 0 1px #160;
+}
+
+.button.submit:hover::before {
+  color: #6d5;
+}
+
 @media (max-width: 900px) {
   .results li {
     width: 33.333%;
   }
+  input {
+    width: 100%;
+  }
 }
 
 @media (max-width: 600px) {
+  input[type=search] {
+    font-size: 30px;
+    line-height: 40px;
+  }
   .results li {
     width: 50%;
   }
 }
 
 @media (max-width: 320px) {
+  input[type=search] {
+    font-size: 20px;
+    line-height: 30px;
+  }
   .results li {
     width: 100%;
   }
 }
 
-[data-auth="true"] .only-signed-out,
-[data-auth="false"] .only-signed-in {
-  display: none;
+.notice {
+  color: #999;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 24px;
+  padding: 15px;
 }

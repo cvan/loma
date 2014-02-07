@@ -128,13 +128,21 @@ define('views/search',
     previousResults = data;
   }
 
-  function init() {
-    GET = utils.parseQueryString();
-    reset();
-    if (GET.q) {
-      q.value = GET.q;
-    }
+  $.delegate('input', 'input[name=q]', function() {
+    search();
+  }, false);
+  $.delegate('submit', '.form-search', function(e) {
+    e.preventDefault();
+    search();
+  });
 
+  GET = utils.parseQueryString();
+  reset();
+  if (GET.q) {
+    q.value = GET.q;
+  }
+
+  function init() {
     if (document.body.classList.contains('results')) {
       search();
     }
@@ -146,14 +154,6 @@ define('views/search',
       });
     });
   }
-
-  $.delegate('input', 'input[name=q]', function() {
-    search();
-  }, false);
-  $.delegate('submit', '.form-search', function(e) {
-    e.preventDefault();
-    search();
-  });
 
   return {
     index: index,

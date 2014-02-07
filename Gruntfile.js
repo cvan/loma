@@ -91,6 +91,8 @@ module.exports = function(grunt) {
           'src/log.js',
           'src/dom.js',
           'src/cache.js',
+          'src/routes_api.js',
+          'src/url.js',
           'src/user.js',
           'src/templating.js',
           'src/worker.js',
