@@ -36,9 +36,11 @@ function loadDocs() {
 
   var _id;
   list.forEach(function indexDoc(doc) {
-    _id = doc[index._ref].toString();
-    docs[_id] = doc;
-    index.add(doc);
+    if (Object.keys(doc).length) {
+      _id = doc[index._ref].toString();
+      docs[_id] = doc;
+      index.add(doc);
+    }
   });
 
   log('Indexed ' + list.length +

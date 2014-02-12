@@ -1,6 +1,6 @@
 define('views/search',
-       ['cache', 'dom', 'log', 'pages', 'templating', 'utils', 'worker'],
-       function(cache, $, log, pages, templating, utils, worker) {
+       ['cache', 'dom', 'log', 'pages', 'templating', 'url', 'utils', 'worker'],
+       function(cache, $, log, pages, templating, url, utils, worker) {
   cache = new cache();
   var console = log('search');
   var GET;
@@ -31,7 +31,7 @@ define('views/search',
       worker.postMessage({
         type: 'index',
         data: {
-          url: '../data/app-processed-docs.json',
+          url: url('search.docs'),
           fields: {
             app_url: {boost: 25},
             slug: {boost: 20},
