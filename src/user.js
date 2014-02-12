@@ -84,7 +84,9 @@ define('user',
       return;
     }
     console.log('Updating user settings', data);
+    console.log(settings, data);
     settings = utils.defaults(settings, data);
+    console.log(settings, data);
     saveSettings();
   }
 

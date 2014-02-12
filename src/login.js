@@ -17,16 +17,16 @@ define('login',
   };
 
   $.delegate('login', $.body, function() {
-    console.log('login!');
     $.body.dataset.auth = 'true';
+    $.body.dataset.vouched = JSON.stringify(!!user.getSetting('vouched'));
   });
 
   $.delegate('login_fail logout', $.body, function() {
-    console.log('logout!');
     $.body.dataset.auth = 'false';
+    $.body.dataset.vouched = 'false';
   });
 
-  $.delegate('click', '.login', function() {
+  $.delegate('click', '.login, [data-auth="false"] a.submit', function() {
     console.log('Logging user in');
     navigator.id.request(loginOpts);
   });

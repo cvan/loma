@@ -172,12 +172,13 @@ nav a {
   position: relative;
 }
 
-.results .submit,
-.submit .browse,
-[data-auth="false"] .sign-in {
-  display: inline-block;
+.header nav a.submit {
+  display: none;
 }
 
+.results a.submit,
+.submit .browse,
+[data-auth="false"] .sign-in,
 [data-auth="true"] .avatar {
   display: inline-block;
 }
@@ -209,14 +210,19 @@ a.avatar:hover img {
   padding-left: 38px;  /* 15px for left padding + 16px for icon + 8px for margin */
 }
 
-nav .submit::before {
+[data-auth="false"] nav a.submit,
+[data-vouched="true"] nav a.submit {
+  display: inline-block;
+}
+
+nav a.submit::before {
   color: #6d5;
   content: "\271a\00a0\00a0";  /* ✚ */
   text-shadow: 0 0 1px #160, 0 0 1px #160, 0 0 1px #160, 0 0 1px #160;
 }
 
 /*
-nav .submit:hover::before {
+nav a.submit:hover::before {
   color: #160;
   text-shadow: 0 0 1px #6d5, 0 0 1px #6d5, 0 0 1px #6d5, 0 0 1px #6d5;
 }
