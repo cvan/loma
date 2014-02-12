@@ -9,18 +9,25 @@
     "type": "git",
     "url": "git://github.com/cvan/loma.git"
   },
+  "dependencies": {
+    "node-static": "latest"
+  },
   "devDependencies": {
-    "grunt-cli": "latest",
     "grunt": "~0.4.1",
-    "grunt-contrib-watch": "~0.5.3",
-    "nunjucks": "~1.0.1",
-    "grunt-nunjucks": "~0.1.0",
-    "grunt-contrib-jshint": "~0.8.0",
-    "grunt-contrib-connect": "~0.6.0",
+    "grunt-cli": "latest",
     "grunt-connect-rewrite": "~0.2.0",
-    "grunt-contrib-uglify": "~0.3.2",
-    "grunt-processhtml": "~0.3.0",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-cssmin": "~0.7.0"
+    "grunt-contrib-connect": "~0.6.0",
+    "grunt-contrib-cssmin": "~0.7.0",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-uglify": "~0.3.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-nunjucks": "~0.1.0",
+    "grunt-processhtml": "~0.3.0",
+    "nunjucks": "~1.0.1"
+  },
+  "scripts": {
+    "start": "grunt minify && node app.js",
+    "server": "node app.js"
   }
 }

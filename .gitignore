@@ -1,5 +1,11 @@
-#src/templates.js
+*.bak
+*.deflate
+*.gz*
+*npm-debug.log
 .*swp
 .DS_Store
-dist/
 node_modules/
+settings_local.js
+settings_prod.js
+src/dist/
+src/templates.js

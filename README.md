@@ -3,7 +3,7 @@
 It's a list of mobile apps.
 
 
-## Installation
+# Installation
 
 We use [grunt](http://gruntjs.com/):
 
@@ -17,8 +17,12 @@ For local settings:
 
     cp src/settings_local.js.dist src/settings_local.js
 
+For production settings:
 
-## Development
+    cp src/settings_local.js.dist src/settings_prod.js
+
+
+# Development
 
 Load from a page with an origin (i.e., a server). If you're running locally,
 use grunt to fire up a local server:
@@ -37,3 +41,30 @@ To build production-ready `index.html` and minified assets to a `dist/`
 directory:
 
     grunt minify
+
+To run the production-ready `index.html`:
+
+    npm start
+
+
+# Deployment
+
+To push for the first time to stackato:
+
+    stackato push
+
+To deploy to stackato:
+
+    stackato update
+
+To start the instance on stackato:
+
+    stackato start
+
+To read the logs on stackato:
+
+    stackato logs
+
+To run shell commands on stackato:
+
+    stackato run cat ../logs/stdout.log

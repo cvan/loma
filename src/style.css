@@ -203,7 +203,7 @@ a.avatar:hover img {
 }
 
 .sign-in {
-  background: url(login.svg) 15px 50% no-repeat;
+  background: url(../login.svg) 15px 50% no-repeat;
   display: none;
   float: right;
   padding-left: 38px;  /* 15px for left padding + 16px for icon + 8px for margin */
@@ -298,6 +298,7 @@ h1 {
 }
 
 .screenshot {
+  background-color: #eee;
   background-repeat: no-repeat;
   height: 100%;
   position: absolute;

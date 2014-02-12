@@ -65,7 +65,7 @@ module.exports = function(grunt) {
       precompile: {
         baseDir: 'src/templates/',
         src: 'src/templates/*',
-        dest: 'src/templates.js',
+        dest: 'src/templates.js'
       }
     },
     concat: {
@@ -102,7 +102,7 @@ module.exports = function(grunt) {
           'src/views/submit.js',
           'src/main.js'
         ],
-        dest: 'dist/main.min.js'
+        dest: 'src/dist/main.min.js'
       }
     },
     cssmin: {
@@ -110,21 +110,21 @@ module.exports = function(grunt) {
         expand: true,
         cwd: 'src/',
         src: ['style.css'],
-        dest: 'dist/',
+        dest: 'src/dist/',
         ext: '.min.css'
       }
     },
     uglify: {
       dist: {
         files: {
-          'dist/main.min.js': ['<%= concat.dist.dest %>']
+          'src/dist/main.min.js': ['<%= concat.dist.dest %>']
         }
       }
     },
     processhtml: {
       dist: {
         files: {
-          'dist/index.html': ['src/index.html']
+          'src/dist/server.html': ['src/index.html']
         }
       }
     },
@@ -151,5 +151,5 @@ module.exports = function(grunt) {
   grunt.registerTask('default',
     ['server', 'watch:nunjucks']);
   grunt.registerTask('minify',
-    ['concat', 'cssmin', 'nunjucks', 'uglify', 'processhtml']);
+    ['nunjucks', 'concat', 'cssmin', 'uglify', 'processhtml']);
 };
