@@ -1,4 +1,6 @@
-define('templating', ['user', 'utils'], function(user, utils) {
+define('templating',
+       ['settings', 'user', 'utils'],
+       function(settings, user, utils) {
   function render(name, ctx, cb) {
     if (typeof ctx === 'function') {
       cb = ctx;
@@ -17,7 +19,7 @@ define('templating', ['user', 'utils'], function(user, utils) {
   var envGlobals = nunjucks.require('globals');
   var filters = nunjucks.require('filters');
 
-  env.addFunction = function(name, func) {
+  env.addGlobal = function(name, func) {
     envGlobals[name] = func;
   };
 
@@ -40,7 +42,7 @@ define('templating', ['user', 'utils'], function(user, utils) {
     return opts ? filters.format(str, opts) : str;
   }
 
-  env.addFunction('_', env.makeSafe(_l));
+  env.addGlobal('_', env.makeSafe(_l));
 
   // The exposed user object should know nothing of tokens.
   var userObj = {
@@ -50,7 +52,9 @@ define('templating', ['user', 'utils'], function(user, utils) {
     loggedIn: user.loggedIn
   };
 
-  env.addFunction('user', userObj);
+  env.addGlobal('user', userObj);
+
+  env.addGlobal('settings', settings);
 
   return {
     _l: _l,

@@ -1,8 +1,10 @@
+{{ settings }}
 {% for data in data.results %}
   <li{% if data.score %} title="{{ _('Score: {score}', 'resultsScore', {score: data.score.toFixed(8)}) }}"{% endif %}>
     {% set doc = data.doc %}
+    {% set screenshot_url = settings.firesnaggleURL + '/screenshot?url=' + doc.app_url %}
     <a href="{{ doc.app_url }}" target="_blank">
-      <div class="screenshot" style="background-image: url(http://localhost:7000/screenshot?url={{ doc.app_url }})"></div>
+      <div class="screenshot" style="background-image: url({{ screenshot_url }})"></div>
       <span class="name">{{ doc.name }}</span>
     </a>
   </li>

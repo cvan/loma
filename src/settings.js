@@ -5,6 +5,7 @@ define('settings', ['settings_local', 'utils'], function(settings_local, utils) 
   var settings = utils.defaults(settingsBase, {
     appName: 'loma',
     apiURL: 'http://' + window.location.host,  // No trailing slash, please./
+    firesnaggleURL: 'http://' + window.location.host,
 
     // The string to suffix page titles with. Used by `pages.js`.
     titleSuffix: 'loma'
