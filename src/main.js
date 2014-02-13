@@ -1,6 +1,7 @@
 define('main', [], function() {
 
 var $ = require('dom');
+var app = new routes();
 var GET = require('utils').parseQueryString();
 
 if (GET.debug) {
@@ -19,8 +20,6 @@ document.webL10n.ready(function() {
   var pages = require('pages');
   var templating = require('templating');
   var user = require('user');
-
-  var app = new routes();
 
   var views = {
     '/': 'search',
@@ -67,6 +66,8 @@ document.webL10n.ready(function() {
     }
   }, 100);
 });
+
+return {app: app};
 
 });
 
