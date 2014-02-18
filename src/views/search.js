@@ -135,6 +135,18 @@ define('views/search',
     e.preventDefault();
     search();
   });
+  $.delegate('mousemove', '.screenshot', function(e) {
+    // Change `background-position` of screenshot to be proportional to
+    // cursor position relative to the containing box of the screenshot.
+    var styles = window.getComputedStyle(e.target);
+    var x = e.offsetX / parseInt(styles.width, 10) * 100;
+    var y = e.offsetY / parseInt(styles.height, 10) * 100;
+    e.target.style.backgroundPosition = x + '% ' + y + '%';
+  });
+  $.delegate('mouseout', '.screenshot', function(e) {
+    // Reset positions of hovered-over screenshot.
+    e.target.style.backgroundPosition = '0 0';
+  });
 
   GET = utils.parseQueryString();
   reset();
