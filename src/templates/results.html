@@ -1,4 +1,3 @@
-{{ settings }}
 {% for data in data.results %}
   <li{% if data.score %} title="{{ _('Score: {score}', 'resultsScore', {score: data.score.toFixed(8)}) }}"{% endif %}>
     {% set doc = data.doc %}
