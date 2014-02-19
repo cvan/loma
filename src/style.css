@@ -313,6 +313,7 @@ h1 {
   left: 6px;
   line-height: 22px;
   padding: 4px 6px;
+  pointer-events: none;
   position: absolute;
   top: 6px;
 }
