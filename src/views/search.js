@@ -135,17 +135,27 @@ define('views/search',
     e.preventDefault();
     search();
   });
-  $.delegate('mousemove', '.screenshot', function(e) {
+  $.delegate('mousemove touchstart', '.screenshot', function(e) {
     // Change `background-position` of screenshot to be proportional to
     // cursor position relative to the containing box of the screenshot.
     var styles = window.getComputedStyle(e.target);
     var x = e.offsetX / parseInt(styles.width, 10) * 100;
     var y = e.offsetY / parseInt(styles.height, 10) * 100;
     e.target.style.backgroundPosition = x + '% ' + y + '%';
+    $('.results ol li').forEach(function(v) {
+      if (v !== e.target.parentNode.parentNode && !v.classList.contains('inactive')) {
+        v.classList.add('inactive');
+      }
+    });
   });
-  $.delegate('mouseout', '.screenshot', function(e) {
+  $.delegate('mouseout touchend', '.screenshot', function(e) {
     // Reset positions of hovered-over screenshot.
     e.target.style.backgroundPosition = '0 0';
+    $('.results ol li').forEach(function(v) {
+      if (v !== e.target.parentNode.parentNode && v.classList.contains('inactive')) {
+        v.classList.remove('inactive');
+      }
+    });
   });
 
   GET = utils.parseQueryString();

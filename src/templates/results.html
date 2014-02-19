@@ -3,7 +3,7 @@
     {% set doc = data.doc %}
     {% set screenshot_url = settings.firesnaggleURL + '/screenshot?url=' + doc.app_url %}
     <a href="{{ doc.app_url }}" target="_blank">
-      <div class="screenshot" style="background-image: url({{ screenshot_url }})"></div>
+      <img class="screenshot" src="{{ screenshot_url }}">
       <span class="name">{{ doc.name }}</span>
     </a>
   </li>
