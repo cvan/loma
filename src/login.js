@@ -1,6 +1,6 @@
 define('login',
-       ['capabilities', 'log', 'dom', 'templating', 'url', 'user'],
-       function(capabilities, log, $, templating, url, user) {
+       ['capabilities', 'log', 'dom', 'notification', 'templating', 'url', 'user'],
+       function(capabilities, log, $, notification, templating, url, user) {
   if (!capabilities.persona) {
     return;
   }
@@ -16,13 +16,24 @@ define('login',
     }
   };
 
+  function signOutNotification() {
+    notification.notification(
+      templating._l('You have been signed out', 'signOutNotification'));
+  }
+
+  function signInNotification() {
+    notification.notification(
+      templating._l('You have been signed in', 'signInNotification'));
+  }
+
   $.delegate('login', $.body, function() {
-    console.log('login!');
+    console.log('Logged in');
+    signInNotification();
     $.body.dataset.auth = 'true';
   });
 
   $.delegate('login_fail logout', $.body, function() {
-    console.log('logout!');
+    console.log('Logged out');
     $.body.dataset.auth = 'false';
   });
 
@@ -36,6 +47,7 @@ define('login',
     navigator.id.logout();
     user.clearToken();
     logoutUser();
+    signOutNotification();
   });
 
   navigator.id.watch({
@@ -77,9 +89,9 @@ define('login',
     console.log('Got assertion from Persona');
 
     var data = {
-        assertion: assertion,
-        audience: window.location.origin,
-        isMobile: capabilities.mobileLogin
+      assertion: assertion,
+      audience: window.location.origin,
+      isMobile: capabilities.mobileLogin
     };
 
     $.post(url('login'), data).then(loginSuccess, loginError);

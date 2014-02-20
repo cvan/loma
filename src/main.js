@@ -1,5 +1,4 @@
 define('main', [], function() {
-
 var $ = require('dom');
 var app = new routes();
 var GET = require('utils').parseQueryString();

@@ -1,6 +1,6 @@
 define('views/submit',
-       ['dom', 'main', 'settings', 'templating', 'views/search', 'url', 'user'],
-       function($, main, settings, templating, search, url, user) {
+       ['dom', 'main', 'notification', 'settings', 'templating', 'views/search', 'url', 'user'],
+       function($, main, notification, settings, templating, search, url, user) {
   function rerender() {
     templating.render('submit', function(res) {
       $('main').innerHTML = res;
@@ -18,17 +18,12 @@ define('views/submit',
       name: $('[name=name]').value
     };
     $.post(url('submit'), data, {'Token': user.getToken()}).then(function(res, xhr) {
-      // TODO: Show notification message (issue #39).
-      console.log('Successfully submitted site:', res);
-      setTimeout(function() {
-        // TODO: Be smarter and refresh search docs asynchronously upon
-        // submission (issue #6).
-        window.location.href = '/';
-      }, 7000);
+      notification.notification(
+        templating._l('Site successfully submitted!', 'submitSuccess'));
+      main.app.load('/');
     }, function(res, xhr) {
       console.error('Could not submit site:', xhr.statusText, res);
     });
-    main.app.load('/');
   });
 
   $.delegate('focusin', 'input[type=url]', function(e) {

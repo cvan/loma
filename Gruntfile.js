@@ -95,6 +95,7 @@ module.exports = function(grunt) {
           'src/url.js',
           'src/user.js',
           'src/templating.js',
+          'src/notification.js',
           'src/worker.js',
           'src/pages.js',
           'src/login.js',
