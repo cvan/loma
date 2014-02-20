@@ -80,7 +80,7 @@ define('views/search',
 
   function reset() {
     if (!q) {
-      q = $('input[name=q');
+      q = $('input[name=q]');
     }
     q.value = previousQuery = previousResults = null;
   }
@@ -90,7 +90,7 @@ define('views/search',
 
     data.timing = performance.now() - data.timeStart;
 
-    q = $('input[name=q');
+    q = $('input[name=q]');
 
     // Update location bar based on search term.
     GET = utils.parseQueryString();
