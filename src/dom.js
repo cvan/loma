@@ -34,6 +34,16 @@ define('dom', ['utils'], function(utils) {
     });
   };
 
+  $.each = function($el, cb) {
+    if (typeof $el === 'string') {
+      $el = $($el);
+    }
+    if (!$el.hasOwnProperty('length')) {
+      $el = [$el];
+    }
+    $el.forEach(cb);
+  };
+
   function reqResponse(xhr) {
     var data = xhr.responseText;
     if ((xhr.getResponseHeader('Content-Type') || '').split(';', 1)[0].indexOf('json') !== -1) {

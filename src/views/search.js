@@ -142,7 +142,7 @@ define('views/search',
     var x = e.offsetX / parseInt(styles.width, 10) * 100;
     var y = e.offsetY / parseInt(styles.height, 10) * 100;
     e.target.style.backgroundPosition = x + '% ' + y + '%';
-    $('.results ol li').forEach(function(v) {
+    $.each('.results ol li', function(v) {
       if (v !== e.target.parentNode.parentNode && !v.classList.contains('inactive')) {
         v.classList.add('inactive');
       }
@@ -151,7 +151,7 @@ define('views/search',
   $.delegate('mouseout touchend', '.screenshot', function(e) {
     // Reset positions of hovered-over screenshot.
     e.target.style.backgroundPosition = '0 0';
-    $('.results ol li').forEach(function(v) {
+    $.each($('.results ol li'), function(v) {
       if (v !== e.target.parentNode.parentNode && v.classList.contains('inactive')) {
         v.classList.remove('inactive');
       }
