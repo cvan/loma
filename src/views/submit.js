@@ -1,14 +1,14 @@
 define('views/submit',
        ['dom', 'main', 'settings', 'templating', 'views/search', 'url', 'user'],
        function($, main, settings, templating, search, url, user) {
-  function reload() {
+  function rerender() {
     templating.render('submit', function(res) {
       $('main').innerHTML = res;
     });
   }
 
   $.delegate('login logout', 'body.submit', function() {
-    reload();
+    rerender();
   });
 
   $.delegate('submit', '.submit-form', function(e) {
@@ -50,9 +50,13 @@ define('views/submit',
   });
 
   function init() {
+    if (document.body.dataset.page === 'submit') {
+      return;
+    }
     search.reset();
+    document.body.dataset.page = 'submit';
     document.body.setAttribute('class', 'submit');
-    reload();
+    rerender();
   }
 
   return {

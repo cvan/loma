@@ -10,14 +10,6 @@ define('views/search',
   var previousResults = null;
   var timeStart;
 
-  if (document.body.classList.contains('results')) {
-    search();
-  }
-
-  function eq(a, b) {
-    return JSON.stringify(a) === JSON.stringify(b);
-  }
-
   function index() {
     var promise = new Promise(function(resolve, reject) {
       worker.addEventListener('message', function(e) {
@@ -113,7 +105,7 @@ define('views/search',
       return x.doc._id;
     }) : [];
 
-    if (!eq(current, previous)) {
+    if (!utils.eq(current, previous)) {
       // Only re-render results if results have changed.
       templating.render('results', {data: data}, function(res) {
         $('main ol').innerHTML = res;
@@ -165,13 +157,15 @@ define('views/search',
   }
 
   function init() {
-    if (document.body.classList.contains('results')) {
-      search();
+    if (document.body.dataset.page === 'results') {
+      // If we've already rendered this page.
+      return search();
     }
     templating.render('browse', function(res) {
       $('main').innerHTML = res;
       indexed.then(function() {
         document.body.setAttribute('class', 'results');
+        document.body.dataset.page = 'results';
         search();
       });
     });

@@ -1,4 +1,8 @@
 define('utils', [], function() {
+  function eq(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  }
+
   function baseurl(url) {
     return url.split('?')[0];
   }
@@ -101,6 +105,7 @@ define('utils', [], function() {
   return {
     defaults: defaults,
     encodeURIComponent: encodeURIComponent,
+    eq: eq,
     decodeURIComponent: decodeURIComponent,
     format: format,
     parseLink: parseLink,
