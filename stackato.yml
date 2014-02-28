@@ -10,7 +10,7 @@ mem: 128
 
 hooks:
     pre-push:
-        - mv src/settings_local.js src/settings_local.js.bak && cp src/settings_prod.js src/settings_local.js && grunt minify && mv src/settings_local.js.bak src/settings_local.js
+        - grunt minify
 
 processes:
     web: npm run-script server

@@ -84,7 +84,7 @@ module.exports = function(grunt) {
           'src/lib/promise-0.1.1.js',
           'src/amd.js',
           'src/utils.js',
-          'src/settings_local.js',
+          'src/settings_prod.js',
           'src/settings.js',
           'src/capabilities.js',
           'src/storage.js',
