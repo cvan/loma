@@ -49,13 +49,9 @@ To run the production-ready `index.html`:
 
 # Deployment
 
-To push for the first time to stackato:
+We use stackato:
 
-    stackato push
-
-To deploy to stackato:
-
-    stackato update
+    stackato push --no-prompt
 
 To start the instance on stackato:
 
