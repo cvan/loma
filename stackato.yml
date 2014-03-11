@@ -10,7 +10,7 @@ mem: 128
 
 hooks:
     pre-push:
-        - grunt minify
+        - ./deploy.sh
 
 processes:
     web: npm run-script server

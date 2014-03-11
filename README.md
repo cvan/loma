@@ -19,7 +19,7 @@ For local settings:
 
 For production settings:
 
-    cp src/settings_local.js.dist src/settings_prod.js
+    cp src/settings_prod.js.dist src/settings_prod.js
 
 
 # Development
