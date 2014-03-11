@@ -64,3 +64,7 @@ To read the logs on stackato:
 To run shell commands on stackato:
 
     stackato run cat ../logs/stdout.log
+
+To access the shell on stackato:
+
+    stackato ssh
